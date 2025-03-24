@@ -415,10 +415,10 @@ class BuildOption:
         self.cn_variable_dir = f"{self.src_dir}/cn"
         self.cn_static_dir = f"{self.cn_variable_dir}/static"
 
-        self.cn_base_font_dir = None
         self.cn_suffix = None
         self.cn_suffix_compact = None
-        self.output_cn = None
+        self.cn_base_font_dir = ""
+        self.output_cn = ""
         # In these subfamilies:
         #   - NameID1 should be the family name
         #   - NameID2 should be the subfamily name
@@ -667,8 +667,9 @@ def get_new_name_from_map(old_name: str, map: dict[str, str]):
     new_name = map.get(old_name)
     if not new_name:
         arr = re.split(r"[\._]", old_name, maxsplit=2)
-        if map.get(arr[0]):
-            new_name = map.get(arr[0]) + old_name[len(arr[0]) :]
+        name = map.get(arr[0])
+        if name:
+            new_name = name + old_name[len(arr[0]) :]
     return new_name
 
 

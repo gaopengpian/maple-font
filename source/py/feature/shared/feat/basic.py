@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 import source.py.feature.utils as fea
 from source.py.feature.shared.feat.number import number_features
 from source.py.feature.shared.feat.locl import locl_features
@@ -62,7 +63,14 @@ case_features = fea.subst_list(
 )
 
 
-basic_features = {
+basic_features: dict[
+    str,
+    Sequence[
+        fea.ast.FeatureReferenceStatement
+        | fea.ast.LookupBlock
+        | fea.ast.SingleSubstStatement
+    ],
+] = {
     "aalt": aalt_features,
     **number_features,
     "case": case_features,

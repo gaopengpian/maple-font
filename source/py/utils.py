@@ -56,7 +56,7 @@ def del_font_name(font: TTFont, id: int):
     font["name"].removeNames(nameID=id)
 
 
-def joinPaths(*args: list[str]) -> str:
+def joinPaths(*args: str) -> str:
     return "/".join(args)
 
 
@@ -193,9 +193,9 @@ def match_unicode_names(file_path: str) -> dict[str, str]:
 
 
 # https://github.com/subframe7536/maple-font/issues/314
-def verify_glyph_width(font: TTFont, expect_widths: list[int], file_name: str = None):
+def verify_glyph_width(font: TTFont, expect_widths: list[int], file_name: str | None = None):
     print("Verify glyph width...")
-    result: tuple[str, int] = []
+    result = []
     for name in font.getGlyphNames():
         width, _ = font["hmtx"][name]
         if width not in expect_widths:

@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 import source.py.feature.utils as fea
 
 _number_list = [
@@ -47,7 +48,9 @@ frac = [
     ),
 ]
 
-number_features = {
+number_features: dict[
+    str, Sequence[fea.ast.SingleSubstStatement | fea.ast.LookupBlock]
+] = {
     "zero": zero,
     "sinf": sinf,
     "sups": sups,

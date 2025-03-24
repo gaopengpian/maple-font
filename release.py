@@ -41,7 +41,7 @@ def format_woff2_name(filename: str):
     return filename.replace(".woff2", "-VF.woff2")
 
 
-def rename_files(dir: str, fn: Callable[[str], str]):
+def rename_files(dir: str, fn: Callable[[str], str | None]):
     for filename in os.listdir(dir):
         if not filename.endswith(".woff") and not filename.endswith(".woff2"):
             continue
@@ -174,7 +174,7 @@ def main():
         f.write(generate_directory_hash(cn_static_path))
         f.flush()
 
-    submodule_path = './maple-font-page'
+    submodule_path = "./maple-font-page"
     public_path = f"{submodule_path}/public/fonts"
     shutil.rmtree(public_path, ignore_errors=True)
     shutil.copytree(woff2_dir, public_path)

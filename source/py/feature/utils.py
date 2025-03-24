@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from fontTools.feaLib import ast as ast
 
 glyph_dict = {
@@ -50,9 +51,9 @@ def glyph(
     g: str
     | ast.GlyphClassDefinition
     | ast.GlyphClass
-    | list[str | ast.GlyphClassDefinition | ast.GlyphClass],
+    | Sequence[str | ast.GlyphClassDefinition | ast.GlyphClass],
 ):
-    if isinstance(g, list):
+    if isinstance(g, Sequence):
         return ast.GlyphClass([glyph(x) for x in g])
     if isinstance(g, ast.GlyphClassDefinition):
         return ast.GlyphClassName(g)
@@ -88,7 +89,7 @@ def parse_glyphs_array(
     data: str
     | ast.GlyphClassDefinition
     | ast.GlyphClass
-    | list[str | ast.GlyphClassDefinition | ast.GlyphClass]
+    | Sequence[str | ast.GlyphClassDefinition | ast.GlyphClass]
     | None,
 ):
     if isinstance(data, list):
@@ -102,15 +103,17 @@ def ignore(
     prefix: str
     | ast.GlyphClassDefinition
     | ast.GlyphClass
-    | list[str | ast.GlyphClassDefinition | ast.GlyphClass]
+    | Sequence[str | ast.GlyphClassDefinition | ast.GlyphClass]
     | None,
-    glyphs: str | ast.GlyphClassDefinition | ast.GlyphClass,
+    glyphs: str | ast.GlyphClassDefinition | ast.GlyphClass | None,
     suffix: str
     | ast.GlyphClassDefinition
     | ast.GlyphClass
-    | list[str | ast.GlyphClassDefinition | ast.GlyphClass]
+    | Sequence[str | ast.GlyphClassDefinition | ast.GlyphClass]
     | None,
 ):
+    if not glyphs:
+        raise Exception(f"glyphs cannot be none, prefix={prefix}, suffix={suffix}")
     return ast.IgnoreSubstStatement(
         chainContexts=[
             (
@@ -130,15 +133,20 @@ def ignore(
 
 def subst(
     prefix: str
+    | ast.GlyphClass
     | ast.GlyphClassDefinition
-    | list[str | ast.GlyphClassDefinition]
+    | Sequence[str | ast.GlyphClassDefinition]
     | None,
-    source: str | ast.GlyphClassDefinition | list[str | ast.GlyphClassDefinition],
+    source: str
+    | ast.GlyphClass
+    | ast.GlyphClassDefinition
+    | Sequence[str | ast.GlyphClassDefinition],
     suffix: str
+    | ast.GlyphClass
     | ast.GlyphClassDefinition
-    | list[str | ast.GlyphClassDefinition]
+    | Sequence[str | ast.GlyphClassDefinition]
     | None,
-    target: str,
+    target: str | ast.GlyphClass | ast.GlyphClassDefinition,
 ):
     return ast.SingleSubstStatement(
         glyphs=parse_glyphs_array(source),
@@ -228,15 +236,7 @@ def liga(
     source: str,
     target: str | None = None,
     name: str | None = None,
-    ignores: list[
-        list[
-            str
-            | ast.GlyphClassDefinition
-            | ast.GlyphClass
-            | list[str | ast.GlyphClassDefinition | ast.GlyphClass]
-            | None
-        ]
-    ]
+    ignores: list[Sequence[str | ast.GlyphClassDefinition | ast.GlyphClass | None]]
     | None = None,
 ):
     """
@@ -252,14 +252,14 @@ def liga(
         liga_base(
             source.split(" "),
             target,
-            [ignore(conf[0], conf[1], conf[2]) for conf in ignores],
+            [ignore(conf[0], conf[1], conf[2]) for conf in (ignores or [])],
         ),
     )
 
 
 def def_lookup(
     name: str,
-    config: list[
+    config: Sequence[
         ast.SingleSubstStatement
         | ast.IgnoreSubstStatement
         | ast.LanguageStatement
@@ -280,7 +280,10 @@ def use_feature(name: str):
 
 def def_feature(
     name: str,
-    config: list[ast.LookupBlock | ast.SingleSubstStatement] | None = None,
+    config: Sequence[
+        ast.LookupBlock | ast.SingleSubstStatement | ast.FeatureReferenceStatement
+    ]
+    | None = None,
 ):
     block = ast.FeatureBlock(name=name)
     if config:
@@ -319,7 +322,12 @@ def create_classes(config: dict[str, list[str]]):
 
 
 def create_features(
-    config: dict[str, list[ast.LookupBlock | ast.SingleSubstStatement] | None],
+    config: dict[
+        str,
+        Sequence[
+            ast.LookupBlock | ast.SingleSubstStatement | ast.FeatureReferenceStatement
+        ],
+    ],
 ):
     return [def_feature(name=n, config=config[n]) for n in config.keys()]
 
