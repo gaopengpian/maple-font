@@ -1,4 +1,4 @@
-import source.py.feature.part.utils as fea
+import source.py.feature.utils as fea
 
 list = fea.create_languages(
     [

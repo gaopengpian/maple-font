@@ -1,7 +1,7 @@
-import source.py.feature.part.utils as fea
-import source.py.feature.part.lang as lang
-import source.py.feature.part.clazz as clazz
-import source.py.feature.part.feature as feat
+import source.py.feature.utils as fea
+import source.py.feature.shared.lang as lang
+import source.py.feature.regular.clazz as clazz
+import source.py.feature.regular.feature as feat
 
 
 def generate_feature_file():

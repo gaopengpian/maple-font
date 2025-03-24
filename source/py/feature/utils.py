@@ -61,14 +61,15 @@ def glyph(
     return ast.GlyphName(to_glyph_name(g))
 
 
-def clazz(glyphs: str):
-    return ast.GlyphClass(
-        [ast.GlyphName(to_glyph_name(glyph)) for glyph in glyphs.split(" ")]
-    )
+def clazz(glyphs: str | list[str]):
+    _glyphs = glyphs if isinstance(glyphs, list) else glyphs.split(" ")
+    return ast.GlyphClass([ast.GlyphName(to_glyph_name(g)) for g in _glyphs])
 
 
 def def_clazz(
-    name: str, glyphs: list[str], classes: list[ast.GlyphClassDefinition] | None = None
+    name: str,
+    glyphs: list[str],
+    classes: list[ast.GlyphClassDefinition] | None = None,
 ):
     # No need to use `to_glyph_name` here, as the glyphs in
     # class definition are rarely reused, so just assert
@@ -103,10 +104,7 @@ def ignore(
     | ast.GlyphClass
     | list[str | ast.GlyphClassDefinition | ast.GlyphClass]
     | None,
-    glyphs: str
-    | ast.GlyphClassDefinition
-    | ast.GlyphClass
-    | list[str | ast.GlyphClassDefinition | ast.GlyphClass],
+    glyphs: str | ast.GlyphClassDefinition | ast.GlyphClass,
     suffix: str
     | ast.GlyphClassDefinition
     | ast.GlyphClass
@@ -116,15 +114,21 @@ def ignore(
     return ast.IgnoreSubstStatement(
         chainContexts=[
             (
-                parse_glyphs_array(prefix.split(" ") if isinstance(prefix, str) else prefix),
-                parse_glyphs_array(glyphs.split(" ") if isinstance(glyphs, str) else glyphs),
-                parse_glyphs_array(suffix.split(" ") if isinstance(suffix, str) else suffix),
+                parse_glyphs_array(
+                    prefix.split(" ") if isinstance(prefix, str) else prefix
+                ),
+                parse_glyphs_array(
+                    glyphs.split(" ") if isinstance(glyphs, str) else glyphs
+                ),
+                parse_glyphs_array(
+                    suffix.split(" ") if isinstance(suffix, str) else suffix
+                ),
             )
         ]
     )
 
 
-def _subst(
+def subst(
     prefix: str
     | ast.GlyphClassDefinition
     | list[str | ast.GlyphClassDefinition]
@@ -145,16 +149,33 @@ def _subst(
     )
 
 
-def subst(
-    source: str | ast.GlyphClassDefinition | list[str | ast.GlyphClassDefinition],
-    target: str,
+def subst_list(
+    glyphs: list[str],
+    ext: str,
 ):
-    return _subst(
-        source=source,
-        target=target,
-        prefix=None,
-        suffix=None,
-    )
+    """
+    Generate list of ``sub {glyph} by {glyph}{ext};``
+
+    Built-in convert process:
+        convert ``#`` to ``numbersign``
+
+        convert ``# #`` to ``numbersign_numbersign.liga``
+    """
+
+    def parse_liga_name(name: str):
+        if " " in name:
+            return "_".join(map(to_glyph_name, name.split(" "))) + ""
+        return to_glyph_name(name)
+
+    return [
+        subst(
+            source=parse_liga_name(g),
+            target=f"{g}{ext}",
+            prefix=None,
+            suffix=None,
+        )
+        for g in glyphs
+    ]
 
 
 def name_by_glyphs(source: list[str]):
@@ -164,7 +185,7 @@ def name_by_glyphs(source: list[str]):
 def liga_base(
     source: list[str],
     target: str | None = None,
-    ignore: list[ast.IgnoreSubstStatement] | None = None,
+    ignores: list[ast.IgnoreSubstStatement] | None = None,
 ):
     """
     Generate substitutions for ligature
@@ -174,15 +195,15 @@ def liga_base(
 
     # use default param value will cache previous data
     # so manually setup default value here
-    if not ignore:
-        ignore = []
+    if not ignores:
+        ignores = []
 
     subst_rules = []
     initial_prefix_len = len(source) - 1
     prefix_pool = ["SPC"] * initial_prefix_len
 
     subst_rules.append(
-        _subst(
+        subst(
             source=source[-1],
             target=target,
             prefix=prefix_pool,
@@ -195,10 +216,10 @@ def liga_base(
         prefix = prefix_pool[:prefix_len]
         current = source[prefix_len]
         suffix = source[prefix_len + 1 :]
-        val = _subst(source=current, target="SPC", prefix=prefix, suffix=suffix)
+        val = subst(source=current, target="SPC", prefix=prefix, suffix=suffix)
         subst_rules.append(val)
 
-    final_rules = ignore
+    final_rules = ignores
     final_rules.extend(subst_rules[::-1])
     return final_rules
 
@@ -207,7 +228,16 @@ def liga(
     source: str,
     target: str | None = None,
     name: str | None = None,
-    ignore: list[ast.IgnoreSubstStatement] | None = None,
+    ignores: list[
+        list[
+            str
+            | ast.GlyphClassDefinition
+            | ast.GlyphClass
+            | list[str | ast.GlyphClassDefinition | ast.GlyphClass]
+            | None
+        ]
+    ]
+    | None = None,
 ):
     """
     Generate substitutions for ligature with lookup
@@ -217,31 +247,53 @@ def liga(
     if not target:
         target = name
 
-    return def_lookup(name, liga_base(source.split(" "), target, ignore))
+    return def_lookup(
+        name,
+        liga_base(
+            source.split(" "),
+            target,
+            [ignore(conf[0], conf[1], conf[2]) for conf in ignores],
+        ),
+    )
 
 
 def def_lookup(
     name: str,
-    data: list[ast.SingleSubstStatement | ast.IgnoreSubstStatement] | None = None,
+    config: list[
+        ast.SingleSubstStatement
+        | ast.IgnoreSubstStatement
+        | ast.LanguageStatement
+        | ast.ScriptStatement
+        | ast.LigatureSubstStatement
+    ]
+    | None = None,
 ):
     lookup = ast.LookupBlock(name=name)
-    if data:
-        lookup.statements.extend(data)
+    if config:
+        lookup.statements.extend(config)
     return lookup
 
 
-def ref_feature(name: str):
+def use_feature(name: str):
     return ast.FeatureReferenceStatement(name)
 
 
 def def_feature(
     name: str,
-    data: list[ast.LookupBlock | ast.SingleSubstStatement] | None = None,
+    config: list[ast.LookupBlock | ast.SingleSubstStatement] | None = None,
 ):
     block = ast.FeatureBlock(name=name)
-    if data:
-        block.statements.extend(data)
+    if config:
+        block.statements.extend(config)
     return block
+
+
+def use_script(script: str):
+    return ast.ScriptStatement(script)
+
+
+def use_lang(lang: str):
+    return ast.LanguageStatement(f"{lang:4}")
 
 
 def def_lang(script: str, lang: str):
@@ -269,7 +321,7 @@ def create_classes(config: dict[str, list[str]]):
 def create_features(
     config: dict[str, list[ast.LookupBlock | ast.SingleSubstStatement] | None],
 ):
-    return [def_feature(name=i, data=config[i]) for i in config.keys()]
+    return [def_feature(name=n, config=config[n]) for n in config.keys()]
 
 
 def create_languages(
