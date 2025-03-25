@@ -27,8 +27,8 @@ sups = ast.subst_list_map(_number_list, target_suffix="superior")
 numr = ast.subst_list_map(_number_list, target_suffix=".numr")
 dnom = ast.subst_list_map(_number_list, target_suffix=".dnom")
 ordn = [
-    ast.subst(ast.clazz(_number_list), ast.clazz(["A","a"]), None, "ordfeminine"),
-    ast.subst(ast.clazz(_number_list), ast.clazz(["O","o"]), None, "ordmasculine"),
+    ast.subst(ast.clazz(_number_list), ast.clazz(["A", "a"]), None, "ordfeminine"),
+    ast.subst(ast.clazz(_number_list), ast.clazz(["O", "o"]), None, "ordmasculine"),
 ]
 frac = [
     *ast.lookup("FRAC", [ast.subst(None, "/", None, "fraction")]),

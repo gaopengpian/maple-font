@@ -42,8 +42,8 @@ locl_2 = ast.lookup(
     [
         ast.script("latn"),
         ast.lang("CAT"),
-        ast.subst("l", glyph_2, "l", f"{glyph_2}.loclCAT"),
-        ast.subst("L", glyph_2, "L", f"{glyph_2}.loclCAT.case"),
+        ast.subst(["l"], glyph_2, ["l"], f"{glyph_2}.loclCAT"),
+        ast.subst(["L"], glyph_2, ["L"], f"{glyph_2}.loclCAT.case"),
     ],
 )
 

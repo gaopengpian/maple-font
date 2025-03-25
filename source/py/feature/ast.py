@@ -75,19 +75,21 @@ def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
     return g
 
 
-def __arr(data: Sequence[str | Clazz]) -> Sequence[str | Clazz]:
+def __arr(
+    data: str | Clazz | Sequence[str | Clazz],
+) -> str | Clazz | Sequence[str | Clazz]:
     if isinstance(data, str) and " " in data:
         return data.split(" ")
     return data
 
 
-def __prefix(data: Sequence[str | Clazz] | None) -> str:
+def __prefix(data: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if data:
         return __gly(__arr(data)) + " "
     return ""
 
 
-def __suffix(data: Sequence[str | Clazz] | None) -> str:
+def __suffix(data: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if data:
         return " " + __gly(__arr(data))
     return ""
@@ -114,10 +116,6 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
             target.append(c)
 
     return [Line(f"feature {tag} {{"), *target, Line(f"}} {tag};")]
-
-
-def feature_use(tag: str) -> Line:
-    return Line(f"feature {tag};")
 
 
 def cv(id: int, name: str, content: list[Line]) -> list[Line]:
@@ -167,15 +165,15 @@ def lookup(name: str, content: list[Line]) -> list[Line]:
 
 
 def subst(
-    prefix: Sequence[str | Clazz] | None,
-    glyph: str,
-    suffix: Sequence[str | Clazz] | None,
-    replace: str,
+    prefix: str | Clazz | Sequence[str | Clazz] | None,
+    glyph: str | Clazz,
+    suffix: str | Clazz | Sequence[str | Clazz] | None,
+    replace: str | Clazz,
 ) -> Line:
     """
     Generate substitution line.
 
-    >>> subst_list_map('a', 'b', ['c'], 'd')
+    >>> subst(['a'], 'b', 'c', 'd')
     [
         Line("sub a b' c by d;")
     ]
@@ -187,13 +185,13 @@ def subst(
 
 def subst_list_map(
     glyphs: list[str],
-    source_suffix: str | None = None,
-    target_suffix: str | None = None,
+    source_suffix: str = "",
+    target_suffix: str = "",
 ) -> list[Line]:
     """
     Generate substitution lines for a list of glyphs with a specified suffix.
 
-    >>> subst_list_map(['Q', '{ {'], '.cv01')
+    >>> subst_list_map(['Q', '{ {'], target_suffix='.cv01')
     [
         Line('sub Q by Q.cv01;'),
         Line('sub braceleft_braceleft.liga by braceleft_braceleft.liga.cv01;')
@@ -220,10 +218,10 @@ def subst_list_liga(
 
     >>> sub_list_liga('!=')
     [
-        Line("lookup exclaim_equal.liga {"),
-        Line("sub exclaim' equal by SPC;"),
-        Line("sub SPC equal' by exclaim_equal.liga;"),
-        Line("} lookup exclaim_equal.liga;"),
+        Line("lookup exclam_equal.liga {"),
+        Line("sub exclam' equal by SPC;"),
+        Line("sub SPC equal' by exclam_equal.liga;"),
+        Line("} lookup exclam_equal.liga;"),
     ]
     """
     source_arr = list(source)
