@@ -1,3 +1,28 @@
+from collections.abc import Sequence
+
+
+class Line:
+    def __init__(self, text: str, level=0) -> None:
+        self.text = text
+        self.level = level
+
+    def indent(self):
+        self.level += 1
+
+
+class Clazz:
+    def __init__(self, name: str, glyphs: list[str], cls: "list[Clazz]" = []) -> None:
+        self.name = name
+        self.glyphs = glyphs
+        self.cls = cls
+
+    def ref(self) -> str:
+        return f"@{self.name}"
+
+    def state(self) -> Line:
+        return Line(f"{self.ref()} = {clazz(self.glyphs, self.cls)};")
+
+
 glyph_dict = {
     "{": "braceleft",
     "}": "braceright",
@@ -36,50 +61,39 @@ glyph_dict = {
 glyph_dict_keys = glyph_dict.keys()
 
 
-def __gly(g: str | list[str] | None) -> str:
+def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if not g:
         return ""
     if isinstance(g, list):
         return " ".join([__gly(_) for _ in g])
+    if isinstance(g, Clazz):
+        return g.ref()
+    if not isinstance(g, str):
+        raise TypeError(f"{g}({type(g)}) is invalid for __gly")
     if g in glyph_dict_keys:
         return glyph_dict[g]
-    if " " in g:
-        return "_".join([glyph_dict[_] for _ in g.split(" ")]) + ".liga"
     return g
 
+def __arr(data: Sequence[str | Clazz]):
+    if isinstance(data, str) and " " in data:
+        return data.split(" ")
+    return data
 
-def __prefix(data: list[str] | None) -> str:
+
+def __prefix(data: Sequence[str | Clazz] | None) -> str:
     if data:
-        return __gly(data) + " "
+        return __gly(__arr(data)) + " "
     return ""
 
 
-def __suffix(data: list[str] | None) -> str:
+def __suffix(data: Sequence[str | Clazz] | None) -> str:
     if data:
-        return " " + __gly(data)
+        return " " + __gly(__arr(data))
     return ""
 
 
-class Line:
-    def __init__(self, text: str, level=0) -> None:
-        self.text = text
-        self.level = level
-
-    def indent(self):
-        self.level += 1
-
-
-class Clazz:
-    def __init__(self, name: str, glyphs: list[str], cls: "list[Clazz]" = []) -> None:
-        self.name = name
-        self.glyphs = glyphs
-        self.cls = cls
-
-    def ref(self) -> str:
-        return f"@{self.name}"
-
-    def state(self) -> Line:
-        return Line(f"{self.ref()} = {clazz(self.glyphs, self.cls)};")
+def __subst(source: str, target: str) -> Line:
+    return Line(f"sub {source} by {target};")
 
 
 def create(content: list[Line], indent=2) -> str:
@@ -87,7 +101,7 @@ def create(content: list[Line], indent=2) -> str:
     return _idt.join([("\n" + _idt * c.level + c.text) for c in content])
 
 
-def feature(tag: str, content: list[Line | list[Line]]) -> list[Line]:
+def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     target = []
     for c in content:
         if isinstance(c, list):
@@ -99,6 +113,10 @@ def feature(tag: str, content: list[Line | list[Line]]) -> list[Line]:
             target.append(c)
 
     return [Line(f"feature {tag} {{"), *target, Line(f"}} {tag};")]
+
+
+def feature_use(tag: str) -> Line:
+    return Line(f"feature {tag};")
 
 
 def cv(id: int, name: str, content: list[Line]) -> list[Line]:
@@ -129,8 +147,8 @@ def ss(id: int, name: str, content: list[Line]) -> list[Line]:
     return feature(f"ss{id:02d}", [*param, *content])
 
 
-def langsys(script: str, lang: str) -> Line:
-    return Line(f"languagesystem {script} {lang};")
+def langsys_list(config: list[list[str]]) -> list[Line]:
+    return [Line(f"languagesystem {script} {lang};") for script, lang in config]
 
 
 def lang(lang: str) -> Line:
@@ -148,25 +166,29 @@ def lookup(tag: str, content: list[Line]) -> list[Line]:
 
 
 def subst(
-    prefix: list[str] | None, glyph: str, suffix: list[str] | None, replace: str
+    prefix: Sequence[str | Clazz] | None,
+    glyph: str,
+    suffix: Sequence[str | Clazz] | None,
+    replace: str,
 ) -> Line:
-    return Line(
-        f"sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)} by {__gly(replace)};"
+    return __subst(
+        f"{__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)}", f"{__gly(replace)}"
     )
 
 
-def ignore(prefix: list[str] | None, glyph: str, suffix: list[str] | None) -> Line:
-    return Line(f"ignore sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)};")
-
-
-def clazz(glyphs: list[str], cls: "list[Clazz]" = []) -> str:
-    _content = [c.ref() for c in cls]
+def subst_list_map(glyphs: list[str], replace_suffix: str) -> list[Line]:
+    result = []
     for g in glyphs:
-        _content.append(__gly(g))
-    return "[" + " ".join(_content) + "]"
+        if " " in g:
+            _g = "_".join(map(__gly, g.split(" "))) + ".liga"
+        else:
+            _g = __gly(g)
+        result.append(__subst(_g, f"{_g}{replace_suffix}"))
+
+    return result
 
 
-def liga(
+def subst_list_liga(
     source: str,
     target: str | None = None,
     ignores: list[Line] | None = None,
@@ -177,7 +199,7 @@ def liga(
     source_arr = list(source)
 
     if not target:
-        target = __gly(" ".join(source_arr))
+        target = __gly("_".join(map(__gly, source_arr)))
 
     # use default param value will cache previous data
     # so manually setup default value here
@@ -208,3 +230,18 @@ def liga(
     final_rules = ignores
     final_rules.extend(subst_rules[::-1])
     return final_rules
+
+
+def ignore(
+    prefix: Sequence[str | Clazz] | None,
+    glyph: str,
+    suffix: Sequence[str | Clazz] | None,
+) -> Line:
+    return Line(f"ignore sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)};")
+
+
+def clazz(glyphs: list[str], cls: list[Clazz] = []) -> str:
+    _content = [c.ref() for c in cls]
+    for g in glyphs:
+        _content.append(__gly(g))
+    return "[" + " ".join(_content) + "]"

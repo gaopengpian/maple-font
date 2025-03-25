@@ -1,39 +1,37 @@
-import source.py.feature.utils as fea
-from source.py.feature.shared.clazz import (
-    total_list
-)
+import source.py.feature.ast as ast
+from source.py.feature.shared.clazz import list
 
 
-cls_a = fea.def_clazz("A", ["A", "a", "a.cv02"])
-cls_b = fea.def_clazz("B", ["B", "b"])
-cls_c = fea.def_clazz("C", ["C", "c"])
-cls_d = fea.def_clazz("D", ["D", "d"])
-cls_e = fea.def_clazz("E", ["E", "e"])
-cls_f = fea.def_clazz("F", ["F", "f"])
-cls_g = fea.def_clazz("G", ["G", "g"])
-cls_h = fea.def_clazz("H", ["H", "h"])
-cls_i = fea.def_clazz("I", ["I", "i", "i.cv03"])
-cls_j = fea.def_clazz("J", ["J", "j"])
-cls_k = fea.def_clazz("K", ["K", "k"])
-cls_l = fea.def_clazz("L", ["L", "l", "l.cv04"])
-cls_m = fea.def_clazz("M", ["M", "m"])
-cls_n = fea.def_clazz("N", ["N", "n"])
-cls_o = fea.def_clazz("O", ["O", "o"])
-cls_p = fea.def_clazz("P", ["P", "p"])
-cls_q = fea.def_clazz("Q", ["Q", "q", "Q.cv01"])
-cls_r = fea.def_clazz("R", ["R", "r"])
-cls_s = fea.def_clazz("S", ["S", "s"])
-cls_t = fea.def_clazz("T", ["T", "t"])
-cls_u = fea.def_clazz("U", ["U", "u"])
-cls_v = fea.def_clazz("V", ["V", "v"])
-cls_w = fea.def_clazz("W", ["W", "w"])
-cls_x = fea.def_clazz("X", ["X", "x"])
-cls_y = fea.def_clazz("Y", ["Y", "y"])
-cls_z = fea.def_clazz("Z", ["Z", "z"])
-hex_letter = fea.def_clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
+cls_a = ast.Clazz("A", ["A", "a", "a.cv02"])
+cls_b = ast.Clazz("B", ["B", "b"])
+cls_c = ast.Clazz("C", ["C", "c"])
+cls_d = ast.Clazz("D", ["D", "d"])
+cls_e = ast.Clazz("E", ["E", "e"])
+cls_f = ast.Clazz("F", ["F", "f"])
+cls_g = ast.Clazz("G", ["G", "g"])
+cls_h = ast.Clazz("H", ["H", "h"])
+cls_i = ast.Clazz("I", ["I", "i", "i.cv03"])
+cls_j = ast.Clazz("J", ["J", "j"])
+cls_k = ast.Clazz("K", ["K", "k"])
+cls_l = ast.Clazz("L", ["L", "l", "l.cv04"])
+cls_m = ast.Clazz("M", ["M", "m"])
+cls_n = ast.Clazz("N", ["N", "n"])
+cls_o = ast.Clazz("O", ["O", "o"])
+cls_p = ast.Clazz("P", ["P", "p"])
+cls_q = ast.Clazz("Q", ["Q", "q", "Q.cv01"])
+cls_r = ast.Clazz("R", ["R", "r"])
+cls_s = ast.Clazz("S", ["S", "s"])
+cls_t = ast.Clazz("T", ["T", "t"])
+cls_u = ast.Clazz("U", ["U", "u"])
+cls_v = ast.Clazz("V", ["V", "v"])
+cls_w = ast.Clazz("W", ["W", "w"])
+cls_x = ast.Clazz("X", ["X", "x"])
+cls_y = ast.Clazz("Y", ["Y", "y"])
+cls_z = ast.Clazz("Z", ["Z", "z"])
+hex_letter = ast.Clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
 
-list = [
-    *total_list,
+list = [c.state() for c in[
+    *list,
     cls_a,
     cls_b,
     cls_c,
@@ -61,4 +59,4 @@ list = [
     cls_y,
     cls_z,
     hex_letter,
-]
+]]

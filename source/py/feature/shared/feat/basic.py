@@ -1,21 +1,23 @@
-from collections.abc import Sequence
-import source.py.feature.utils as fea
+import source.py.feature.ast as ast
 from source.py.feature.shared.feat.number import number_features
 from source.py.feature.shared.feat.locl import locl_features
 
-aalt_features = [
-    fea.use_feature("calt"),
-    fea.use_feature("locl"),
-    fea.use_feature("subs"),
-    fea.use_feature("sinf"),
-    fea.use_feature("sups"),
-    fea.use_feature("frac"),
-    fea.use_feature("ordn"),
-    fea.use_feature("case"),
-    fea.use_feature("zero"),
-]
+aalt_features = ast.feature(
+    "aalt",
+    [
+        ast.feature_use("calt"),
+        ast.feature_use("locl"),
+        ast.feature_use("subs"),
+        ast.feature_use("sinf"),
+        ast.feature_use("sups"),
+        ast.feature_use("frac"),
+        ast.feature_use("ordn"),
+        ast.feature_use("case"),
+        ast.feature_use("zero"),
+    ],
+)
 
-case_features = fea.subst_list(
+case_features = ast.feature("case", ast.subst_list_map(
     [
         "colon",
         "periodcentered.loclCAT",
@@ -60,19 +62,12 @@ case_features = fea.subst_list(
         "circumflexcomb_tildecomb",
     ],
     ".case",
-)
+))
 
 
-basic_features: dict[
-    str,
-    Sequence[
-        fea.ast.FeatureReferenceStatement
-        | fea.ast.LookupBlock
-        | fea.ast.SingleSubstStatement
-    ],
-] = {
-    "aalt": aalt_features,
-    **number_features,
-    "case": case_features,
-    "locl": locl_features,
-}
+basic_features: list[ast.Line] = [
+    *aalt_features,
+    *number_features,
+    *case_features,
+    *locl_features,
+]

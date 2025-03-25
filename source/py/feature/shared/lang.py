@@ -1,6 +1,6 @@
-import source.py.feature.utils as fea
+import source.py.feature.ast as ast
 
-list = fea.create_languages(
+list = ast.langsys_list(
     [
         ["DFLT", "dflt"],
         ["latn", "dflt"],

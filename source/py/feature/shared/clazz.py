@@ -1,16 +1,16 @@
-import source.py.feature.utils as fea
+import source.py.feature.ast as ast
 
-zero = fea.def_clazz("Zero", ["zero", "zero.zero"])
-one = fea.def_clazz("One", ["one", "one.cv04"])
-digit = fea.def_clazz(
+zero = ast.Clazz("Zero", ["zero", "zero.zero"])
+one = ast.Clazz("One", ["one", "one.cv04"])
+digit = ast.Clazz(
     "Digit",
     ["two", "three", "four", "five", "six", "seven", "eight", "nine"],
     [zero, one],
 )
 
-space = fea.def_clazz("Space", ["space", "nbspace"])
+space = ast.Clazz("Space", ["space", "nbspace"])
 
-normal_separator = fea.def_clazz(
+normal_separator = ast.Clazz(
     "NormalSeparator",
     [
         "[",
@@ -25,7 +25,7 @@ normal_separator = fea.def_clazz(
     ],
 )
 
-upper = fea.def_clazz(
+upper = ast.Clazz(
     "Uppercase",
     [
         "A",
@@ -308,7 +308,7 @@ upper = fea.def_clazz(
     ],
 )
 
-comb_top_acc = fea.def_clazz(
+comb_top_acc = ast.Clazz(
     "CombiningTopAccents",
     [
         "acutecomb",
@@ -328,7 +328,7 @@ comb_top_acc = fea.def_clazz(
     ],
 )
 
-comb_non_top_acc = fea.def_clazz(
+comb_non_top_acc = ast.Clazz(
     "CombiningNonTopAccents",
     [
         "cedillacomb",
@@ -383,10 +383,10 @@ marks = [
     "circumflexcomb_tildecomb",
 ]
 
-marks_comb = fea.def_clazz("MarksComb", marks)
-marks_comb_case = fea.def_clazz("MarksCombCase", [f"{m}.case" for m in marks])
+marks_comb = ast.Clazz("MarksComb", marks)
+marks_comb_case = ast.Clazz("MarksCombCase", [f"{m}.case" for m in marks])
 
-total_list = [
+list = [
     zero,
     one,
     digit,

@@ -1,4 +1,4 @@
-import source.py.feature.utils as fea
+import source.py.feature.ast as ast
 
 _number_list = [
     "zero",
@@ -16,49 +16,49 @@ _number_list = [
 _number_list_numr = [f"{n}.numr" for n in _number_list]
 _number_list_dnom = [f"{n}.dnom" for n in _number_list]
 
-zero = fea.subst_list(
+zero = ast.subst_list_map(
     ["zero", "zero.dnom", "zero.numr", "zeroinferior", "zerosuperior"], ".zero"
 )
 
-sinf = fea.subst_list(_number_list, "inferior")
-sups = fea.subst_list(_number_list, "superior")
-numr = fea.subst_list(_number_list, ".numr")
-dnom = fea.subst_list(_number_list, ".dnom")
+sinf = ast.subst_list_map(_number_list, "inferior")
+# subs is same as sinf, use another instance to correct indent
+subs = ast.subst_list_map(_number_list, "inferior")
+sups = ast.subst_list_map(_number_list, "superior")
+numr = ast.subst_list_map(_number_list, ".numr")
+dnom = ast.subst_list_map(_number_list, ".dnom")
 ordn = [
-    fea.subst(fea.clazz(_number_list), fea.clazz("A a"), None, "ordfeminine"),
-    fea.subst(fea.clazz(_number_list), fea.clazz("O o"), None, "ordmasculine"),
+    ast.subst(ast.clazz(_number_list), ast.clazz(["A","a"]), None, "ordfeminine"),
+    ast.subst(ast.clazz(_number_list), ast.clazz(["O","o"]), None, "ordmasculine"),
 ]
 frac = [
-    fea.def_lookup("FRAC", [fea.subst(None, "/", None, "fraction")]),
-    fea.def_lookup(
+    *ast.lookup("FRAC", [ast.subst(None, "/", None, "fraction")]),
+    *ast.lookup(
         "UP",
-        [fea.subst(None, fea.clazz(_number_list), None, fea.clazz(_number_list_numr))],
+        [ast.subst(None, ast.clazz(_number_list), None, ast.clazz(_number_list_numr))],
     ),
-    fea.def_lookup(
+    *ast.lookup(
         "DOWN",
         [
-            fea.subst(
-                "fraction", fea.clazz(_number_list), None, fea.clazz(_number_list_numr)
+            ast.subst(
+                "fraction", ast.clazz(_number_list), None, ast.clazz(_number_list_numr)
             ),
-            fea.subst(
-                fea.clazz(_number_list_dnom),
-                fea.clazz(_number_list_numr),
+            ast.subst(
+                ast.clazz(_number_list_dnom),
+                ast.clazz(_number_list_numr),
                 None,
-                fea.clazz(_number_list_dnom),
+                ast.clazz(_number_list_dnom),
             ),
         ],
     ),
 ]
 
-number_features: dict[
-    str, fea.Sequence[fea.ast.SingleSubstStatement | fea.ast.LookupBlock]
-] = {
-    "zero": zero,
-    "sinf": sinf,
-    "subs": sinf,
-    "sups": sups,
-    "numr": numr,
-    "dnom": dnom,
-    "frac": frac,
-    "ordn": ordn,
-}
+number_features = [
+    *ast.feature("zero", zero),
+    *ast.feature("sinf", sinf),
+    *ast.feature("subs", subs),
+    *ast.feature("sups", sups),
+    *ast.feature("numr", numr),
+    *ast.feature("dnom", dnom),
+    *ast.feature("frac", frac),
+    *ast.feature("ordn", ordn),
+]

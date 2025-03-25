@@ -1,6 +1,6 @@
-import source.py.feature.utils as fea
+import source.py.feature.ast as ast
 
-cv01_subst = fea.subst_list(
+cv01_subst = ast.subst_list_map(
     [
         "Q",
         "&",
@@ -35,4 +35,4 @@ cv01_subst = fea.subst_list(
     ".cv01",
 )
 
-cv01 = fea.def_cv(1, "Normalize Special Symbols", cv01_subst)
+cv01 = ast.cv(1, "Normalize Special Symbols", cv01_subst)

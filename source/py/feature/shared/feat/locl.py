@@ -1,77 +1,69 @@
-import source.py.feature.utils as fea
+from copy import deepcopy
+import source.py.feature.ast as ast
 
-rule_0 = fea.subst(None, "i", None, "idotaccent")
+rule_0 = ast.subst(None, "i", None, "idotaccent")
 
-locl_0 = fea.def_lookup(
+locl_0 = ast.lookup(
     "locl_latin_0",
     [
-        fea.use_script("latn"),
-        fea.use_lang("AZE"),
-        rule_0,
-        fea.use_lang("CRT"),
-        rule_0,
-        fea.use_lang("KAZ"),
-        rule_0,
-        fea.use_lang("TAT"),
-        rule_0,
-        fea.use_lang("TRK"),
-        rule_0,
+        ast.script("latn"),
+        ast.lang("AZE"),
+        deepcopy(rule_0),
+        ast.lang("CRT"),
+        deepcopy(rule_0),
+        ast.lang("KAZ"),
+        deepcopy(rule_0),
+        ast.lang("TAT"),
+        deepcopy(rule_0),
+        ast.lang("TRK"),
+        deepcopy(rule_0),
     ],
 )
 
 rule_1 = [
-    fea.subst(None, f"{p}cedilla", None, f"{p}commaaccent")
+    ast.subst(None, f"{p}cedilla", None, f"{p}commaaccent")
     for p in ["S", "s", "T", "t"]
 ]
 
-locl_1 = fea.def_lookup(
+locl_1 = ast.lookup(
     "locl_latin_1",
     [
-        fea.use_script("latn"),
-        fea.use_lang("ROM"),
-        *rule_1,
-        fea.use_lang("MOL"),
-        *rule_1,
+        ast.script("latn"),
+        ast.lang("ROM"),
+        *deepcopy(rule_1),
+        ast.lang("MOL"),
+        *deepcopy(rule_1),
     ],
 )
 
 glyph_2 = "periodcentered"
 
-locl_2 = fea.def_lookup(
+locl_2 = ast.lookup(
     "locl_latin_2",
     [
-        fea.use_script("latn"),
-        fea.use_lang("CAT"),
-        fea.subst("l", glyph_2, "l", f"{glyph_2}.loclCAT"),
-        fea.subst("L", glyph_2, "L", f"{glyph_2}.loclCAT.case"),
+        ast.script("latn"),
+        ast.lang("CAT"),
+        ast.subst("l", glyph_2, "l", f"{glyph_2}.loclCAT"),
+        ast.subst("L", glyph_2, "L", f"{glyph_2}.loclCAT.case"),
     ],
 )
 
-locl_3 = fea.def_lookup(
+locl_3 = ast.lookup(
     "locl_latin_3",
     [
-        fea.use_script("latn"),
-        fea.use_lang("NLD"),
-        fea.ast.LigatureSubstStatement(
-            prefix=fea.parse_glyphs_array("ij"),
-            glyphs=fea.parse_glyphs_array("acutecomb"),
-            suffix=[],
-            replacement=fea.glyph("ij_acute"),
-            forceChain=False,
-        ),
-        fea.ast.LigatureSubstStatement(
-            prefix=fea.parse_glyphs_array("IJ"),
-            glyphs=fea.parse_glyphs_array("acutecomb"),
-            suffix=[],
-            replacement=fea.glyph("IJ_acute"),
-            forceChain=False,
-        ),
+        ast.script("latn"),
+        ast.lang("NLD"),
+        ast.__subst("ij acutecomb'", "ij_acute"),
+        ast.__subst("IJ acutecomb'", "IJ_acute"),
     ],
 )
 
-locl_features = [
-    locl_0,
-    locl_1,
-    locl_2,
-    locl_3,
-]
+locl_features = ast.feature(
+    "locl",
+    [
+        locl_0,
+        locl_1,
+        locl_2,
+        locl_3,
+    ],
+)

@@ -1,35 +1,35 @@
-import source.py.feature.utils as fea
-from source.py.feature.shared.clazz import total_list
+import source.py.feature.ast as ast
+from source.py.feature.shared.clazz import list
 
 
-cls_a = fea.def_clazz("A", ["A", "a", "a.cv31"])
-cls_b = fea.def_clazz("B", ["B", "b"])
-cls_c = fea.def_clazz("C", ["C", "c"])
-cls_d = fea.def_clazz("D", ["D", "d"])
-cls_e = fea.def_clazz("E", ["E", "e"])
-cls_f = fea.def_clazz("F", ["F", "f", "f.cv32"])
-cls_g = fea.def_clazz("G", ["G", "g"])
-cls_h = fea.def_clazz("H", ["H", "h"])
-cls_i = fea.def_clazz("I", ["I", "i", "i.cv33"])
-cls_j = fea.def_clazz("J", ["J", "j", "j.cv33"])
-cls_k = fea.def_clazz("K", ["K", "k", "k.cv34"])
-cls_l = fea.def_clazz("L", ["L", "l", "l.cv35"])
-cls_m = fea.def_clazz("M", ["M", "m"])
-cls_n = fea.def_clazz("N", ["N", "n"])
-cls_o = fea.def_clazz("O", ["O", "o"])
-cls_p = fea.def_clazz("P", ["P", "p"])
-cls_q = fea.def_clazz("Q", ["Q", "q", "Q.cv01"])
-cls_r = fea.def_clazz("R", ["R", "r"])
-cls_s = fea.def_clazz("S", ["S", "s"])
-cls_t = fea.def_clazz("T", ["T", "t"])
-cls_u = fea.def_clazz("U", ["U", "u"])
-cls_v = fea.def_clazz("V", ["V", "v"])
-cls_w = fea.def_clazz("W", ["W", "w"])
-cls_x = fea.def_clazz("X", ["X", "x", "x.cv36"])
-cls_y = fea.def_clazz("Y", ["Y", "y", "y.cv37"])
-cls_z = fea.def_clazz("Z", ["Z", "z"])
-hex_letter = fea.def_clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
-a_l = fea.def_clazz(
+cls_a = ast.Clazz("A", ["A", "a", "a.cv31"])
+cls_b = ast.Clazz("B", ["B", "b"])
+cls_c = ast.Clazz("C", ["C", "c"])
+cls_d = ast.Clazz("D", ["D", "d"])
+cls_e = ast.Clazz("E", ["E", "e"])
+cls_f = ast.Clazz("F", ["F", "f", "f.cv32"])
+cls_g = ast.Clazz("G", ["G", "g"])
+cls_h = ast.Clazz("H", ["H", "h"])
+cls_i = ast.Clazz("I", ["I", "i", "i.cv33"])
+cls_j = ast.Clazz("J", ["J", "j", "j.cv33"])
+cls_k = ast.Clazz("K", ["K", "k", "k.cv34"])
+cls_l = ast.Clazz("L", ["L", "l", "l.cv35"])
+cls_m = ast.Clazz("M", ["M", "m"])
+cls_n = ast.Clazz("N", ["N", "n"])
+cls_o = ast.Clazz("O", ["O", "o"])
+cls_p = ast.Clazz("P", ["P", "p"])
+cls_q = ast.Clazz("Q", ["Q", "q", "Q.cv01"])
+cls_r = ast.Clazz("R", ["R", "r"])
+cls_s = ast.Clazz("S", ["S", "s"])
+cls_t = ast.Clazz("T", ["T", "t"])
+cls_u = ast.Clazz("U", ["U", "u"])
+cls_v = ast.Clazz("V", ["V", "v"])
+cls_w = ast.Clazz("W", ["W", "w"])
+cls_x = ast.Clazz("X", ["X", "x", "x.cv36"])
+cls_y = ast.Clazz("Y", ["Y", "y", "y.cv37"])
+cls_z = ast.Clazz("Z", ["Z", "z"])
+hex_letter = ast.Clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
+a_l = ast.Clazz(
     "AL",
     [
         "a_l.liga",
@@ -43,7 +43,7 @@ a_l = fea.def_clazz(
 )
 
 classes = [
-    *total_list,
+    *list,
     cls_a,
     cls_b,
     cls_c,
