@@ -61,7 +61,7 @@ case_features = ast.feature("case", ast.subst_list_map(
         "circumflexcomb_hookabovecomb",
         "circumflexcomb_tildecomb",
     ],
-    ".case",
+    target_suffix=".case",
 ))
 
 

@@ -1,38 +1,37 @@
-from copy import deepcopy
 import source.py.feature.ast as ast
 
-rule_0 = ast.subst(None, "i", None, "idotaccent")
 
 locl_0 = ast.lookup(
     "locl_latin_0",
     [
         ast.script("latn"),
         ast.lang("AZE"),
-        deepcopy(rule_0),
+        ast.subst(None, "i", None, "idotaccent"),
         ast.lang("CRT"),
-        deepcopy(rule_0),
+        ast.subst(None, "i", None, "idotaccent"),
         ast.lang("KAZ"),
-        deepcopy(rule_0),
+        ast.subst(None, "i", None, "idotaccent"),
         ast.lang("TAT"),
-        deepcopy(rule_0),
+        ast.subst(None, "i", None, "idotaccent"),
         ast.lang("TRK"),
-        deepcopy(rule_0),
+        ast.subst(None, "i", None, "idotaccent"),
     ],
 )
 
-rule_1 = [
-    ast.subst(None, f"{p}cedilla", None, f"{p}commaaccent")
-    for p in ["S", "s", "T", "t"]
-]
+rule_glyphs_1 = ["S", "s", "T", "t"]
 
 locl_1 = ast.lookup(
     "locl_latin_1",
     [
         ast.script("latn"),
         ast.lang("ROM"),
-        *deepcopy(rule_1),
+        *ast.subst_list_map(
+            rule_glyphs_1, source_suffix="cedilla", target_suffix="commaaccent"
+        ),
         ast.lang("MOL"),
-        *deepcopy(rule_1),
+        *ast.subst_list_map(
+            rule_glyphs_1, source_suffix="cedilla", target_suffix="commaaccent"
+        ),
     ],
 )
 

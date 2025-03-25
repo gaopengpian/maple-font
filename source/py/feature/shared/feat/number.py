@@ -20,12 +20,12 @@ zero = ast.subst_list_map(
     ["zero", "zero.dnom", "zero.numr", "zeroinferior", "zerosuperior"], ".zero"
 )
 
-sinf = ast.subst_list_map(_number_list, "inferior")
+sinf = ast.subst_list_map(_number_list, target_suffix="inferior")
 # subs is same as sinf, use another instance to correct indent
-subs = ast.subst_list_map(_number_list, "inferior")
-sups = ast.subst_list_map(_number_list, "superior")
-numr = ast.subst_list_map(_number_list, ".numr")
-dnom = ast.subst_list_map(_number_list, ".dnom")
+subs = ast.subst_list_map(_number_list, target_suffix="inferior")
+sups = ast.subst_list_map(_number_list, target_suffix="superior")
+numr = ast.subst_list_map(_number_list, target_suffix=".numr")
+dnom = ast.subst_list_map(_number_list, target_suffix=".dnom")
 ordn = [
     ast.subst(ast.clazz(_number_list), ast.clazz(["A","a"]), None, "ordfeminine"),
     ast.subst(ast.clazz(_number_list), ast.clazz(["O","o"]), None, "ordmasculine"),

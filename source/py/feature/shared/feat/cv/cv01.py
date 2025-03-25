@@ -32,7 +32,7 @@ cv01_subst = ast.subst_list_map(
         "< # - -",
         "xml_empty_comment.liga",  # <!---->
     ],
-    ".cv01",
+    target_suffix=".cv01",
 )
 
 cv01 = ast.cv(1, "Normalize Special Symbols", cv01_subst)

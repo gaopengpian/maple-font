@@ -74,7 +74,8 @@ def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
         return glyph_dict[g]
     return g
 
-def __arr(data: Sequence[str | Clazz]):
+
+def __arr(data: Sequence[str | Clazz]) -> Sequence[str | Clazz]:
     if isinstance(data, str) and " " in data:
         return data.split(" ")
     return data
@@ -159,10 +160,10 @@ def script(script: str) -> Line:
     return Line(f"script {script};")
 
 
-def lookup(tag: str, content: list[Line]) -> list[Line]:
+def lookup(name: str, content: list[Line]) -> list[Line]:
     for c in content:
         c.indent()
-    return [Line(f"lookup {tag} {{"), *content, Line(f"}} {tag};")]
+    return [Line(f"lookup {name} {{"), *content, Line(f"}} {name};")]
 
 
 def subst(
@@ -171,19 +172,40 @@ def subst(
     suffix: Sequence[str | Clazz] | None,
     replace: str,
 ) -> Line:
+    """
+    Generate substitution line.
+
+    >>> subst_list_map('a', 'b', ['c'], 'd')
+    [
+        Line("sub a b' c by d;")
+    ]
+    """
     return __subst(
         f"{__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)}", f"{__gly(replace)}"
     )
 
 
-def subst_list_map(glyphs: list[str], replace_suffix: str) -> list[Line]:
+def subst_list_map(
+    glyphs: list[str],
+    source_suffix: str | None = None,
+    target_suffix: str | None = None,
+) -> list[Line]:
+    """
+    Generate substitution lines for a list of glyphs with a specified suffix.
+
+    >>> subst_list_map(['Q', '{ {'], '.cv01')
+    [
+        Line('sub Q by Q.cv01;'),
+        Line('sub braceleft_braceleft.liga by braceleft_braceleft.liga.cv01;')
+    ]
+    """
     result = []
     for g in glyphs:
         if " " in g:
             _g = "_".join(map(__gly, g.split(" "))) + ".liga"
         else:
             _g = __gly(g)
-        result.append(__subst(_g, f"{_g}{replace_suffix}"))
+        result.append(__subst(f"{_g}{source_suffix}", f"{_g}{target_suffix}"))
 
     return result
 
@@ -194,12 +216,20 @@ def subst_list_liga(
     ignores: list[Line] | None = None,
 ):
     """
-    Generate substitutions for ligature
+    Generate substitution lines for target ligature.
+
+    >>> sub_list_liga('!=')
+    [
+        Line("lookup exclaim_equal.liga {"),
+        Line("sub exclaim' equal by SPC;"),
+        Line("sub SPC equal' by exclaim_equal.liga;"),
+        Line("} lookup exclaim_equal.liga;"),
+    ]
     """
     source_arr = list(source)
 
     if not target:
-        target = __gly("_".join(map(__gly, source_arr)))
+        target = __gly("_".join(map(__gly, source_arr))) + ".liga"
 
     # use default param value will cache previous data
     # so manually setup default value here
@@ -229,7 +259,7 @@ def subst_list_liga(
 
     final_rules = ignores
     final_rules.extend(subst_rules[::-1])
-    return final_rules
+    return lookup(target, final_rules)
 
 
 def ignore(
