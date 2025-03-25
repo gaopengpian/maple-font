@@ -1,4 +1,5 @@
 import source.py.feature.ast as ast
+from source.py.feature.shared.feat.ccmp import ccmp_features
 from source.py.feature.shared.feat.number import number_features
 from source.py.feature.shared.feat.locl import locl_features
 
@@ -76,5 +77,6 @@ basic_features: list[ast.Line] = [
     *aalt_features,
     *number_features,
     *case_features,
+    *ccmp_features,
     *locl_features,
 ]
