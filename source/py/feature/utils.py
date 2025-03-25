@@ -1,11 +1,13 @@
 from collections.abc import Sequence
 from fontTools.feaLib import ast as ast
+from fontTools.feaLib.parser import Parser
+from io import StringIO
 
 glyph_dict = {
-    "[": "braceleft",
-    "]": "braceright",
-    "{": "bracketleft",
-    "}": "bracketright",
+    "{": "braceleft",
+    "}": "braceright",
+    "[": "bracketleft",
+    "]": "bracketright",
     "(": "parenleft",
     ")": "parenright",
     "<": "less",
@@ -53,13 +55,16 @@ def glyph(
     | ast.GlyphClass
     | Sequence[str | ast.GlyphClassDefinition | ast.GlyphClass],
 ):
-    if isinstance(g, Sequence):
+    if isinstance(g, list):
         return ast.GlyphClass([glyph(x) for x in g])
     if isinstance(g, ast.GlyphClassDefinition):
         return ast.GlyphClassName(g)
     if isinstance(g, ast.GlyphClass):
         return g
-    return ast.GlyphName(to_glyph_name(g))
+    if isinstance(g, str):
+        return ast.GlyphName(to_glyph_name(g))
+
+    raise TypeError(f"Unexpected type for glyph: {type(g)}")
 
 
 def clazz(glyphs: str | list[str]):
@@ -75,7 +80,7 @@ def def_clazz(
     # No need to use `to_glyph_name` here, as the glyphs in
     # class definition are rarely reused, so just assert
     # that they are already in the target name.
-    g = ast.GlyphClass([ast.GlyphName(glyph) for glyph in glyphs])
+    g = ast.GlyphClass([ast.GlyphName(to_glyph_name(glyph)) for glyph in glyphs])
     if classes:
         for d in classes:
             g.add_class(ast.GlyphClassName(d))
@@ -139,8 +144,7 @@ def subst(
     | None,
     source: str
     | ast.GlyphClass
-    | ast.GlyphClassDefinition
-    | Sequence[str | ast.GlyphClassDefinition],
+    | ast.GlyphClassDefinition,
     suffix: str
     | ast.GlyphClass
     | ast.GlyphClassDefinition
@@ -149,7 +153,7 @@ def subst(
     target: str | ast.GlyphClass | ast.GlyphClassDefinition,
 ):
     return ast.SingleSubstStatement(
-        glyphs=parse_glyphs_array(source),
+        glyphs=[glyph(source)],
         replace=[glyph(target)],
         prefix=parse_glyphs_array(prefix),
         suffix=parse_glyphs_array(suffix),
@@ -172,18 +176,20 @@ def subst_list(
 
     def parse_liga_name(name: str):
         if " " in name:
-            return "_".join(map(to_glyph_name, name.split(" "))) + ""
+            return "_".join(map(to_glyph_name, name.split(" "))) + ".liga"
         return to_glyph_name(name)
 
-    return [
-        subst(
-            source=parse_liga_name(g),
-            target=f"{g}{ext}",
+    result = []
+    for g in glyphs:
+        parsed_name = parse_liga_name(g)
+        result.append(subst(
+            source=parsed_name,
+            target=f"{parsed_name}{ext}",
             prefix=None,
             suffix=None,
-        )
-        for g in glyphs
-    ]
+        ))
+
+    return result
 
 
 def name_by_glyphs(source: list[str]):
@@ -281,14 +287,57 @@ def use_feature(name: str):
 def def_feature(
     name: str,
     config: Sequence[
-        ast.LookupBlock | ast.SingleSubstStatement | ast.FeatureReferenceStatement
-    ]
-    | None = None,
+        ast.LookupBlock
+        | ast.SingleSubstStatement
+        | ast.FeatureReferenceStatement
+        | ast.NestedBlock
+    ],
 ):
     block = ast.FeatureBlock(name=name)
     if config:
         block.statements.extend(config)
     return block
+
+
+def def_cv(
+    id: int, desc: str, config: Sequence[ast.LookupBlock | ast.SingleSubstStatement]
+) -> ast.FeatureBlock:
+    if id < 1 or id > 99:
+        raise TypeError(f"id should > 0 and < 100, current is {id}")
+
+    tag = f"cv{id:02d}"
+    io = StringIO(
+        "feature "
+        + tag
+        + '{cvParameters{FeatUILabelNameID{name "'
+        + desc
+        + '";};};}'
+        + tag
+        + ";"
+    )
+    result: ast.FeatureBlock = Parser(io).parse().statements[0]
+    result.statements.extend(config)
+    return result
+
+def def_ss(
+    id: int, desc: str, config: Sequence[ast.LookupBlock | ast.SingleSubstStatement]
+) -> ast.FeatureBlock:
+    if id < 1 or id > 20:
+        raise TypeError(f"id should > 0 and < 21, current is {id}")
+
+    tag = f"ss{id:02d}"
+    io = StringIO(
+        "feature "
+        + tag
+        + '{featureNames{name "'
+        + desc
+        + '";};}'
+        + tag
+        + ";"
+    )
+    result: ast.FeatureBlock = Parser(io).parse().statements[0]
+    result.statements.extend(config)
+    return result
 
 
 def use_script(script: str):

@@ -13,15 +13,15 @@ space = fea.def_clazz("Space", ["space", "nbspace"])
 normal_separator = fea.def_clazz(
     "NormalSeparator",
     [
-        "braceleft",
-        "braceright",
-        "bracketleft",
-        "bracketright",
-        "parenleft",
-        "parenright",
-        "bar",
-        "slash",
-        "backslash",
+        "[",
+        "]",
+        "{",
+        "}",
+        "(",
+        ")",
+        "|",
+        "/",
+        "\\",
     ],
 )
 

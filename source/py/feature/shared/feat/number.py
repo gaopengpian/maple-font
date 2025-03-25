@@ -1,4 +1,3 @@
-from collections.abc import Sequence
 import source.py.feature.utils as fea
 
 _number_list = [
@@ -21,11 +20,14 @@ zero = fea.subst_list(
     ["zero", "zero.dnom", "zero.numr", "zeroinferior", "zerosuperior"], ".zero"
 )
 
-
 sinf = fea.subst_list(_number_list, "inferior")
 sups = fea.subst_list(_number_list, "superior")
 numr = fea.subst_list(_number_list, ".numr")
 dnom = fea.subst_list(_number_list, ".dnom")
+ordn = [
+    fea.subst(fea.clazz(_number_list), fea.clazz("A a"), None, "ordfeminine"),
+    fea.subst(fea.clazz(_number_list), fea.clazz("O o"), None, "ordmasculine"),
+]
 frac = [
     fea.def_lookup("FRAC", [fea.subst(None, "/", None, "fraction")]),
     fea.def_lookup(
@@ -49,12 +51,14 @@ frac = [
 ]
 
 number_features: dict[
-    str, Sequence[fea.ast.SingleSubstStatement | fea.ast.LookupBlock]
+    str, fea.Sequence[fea.ast.SingleSubstStatement | fea.ast.LookupBlock]
 ] = {
     "zero": zero,
     "sinf": sinf,
+    "subs": sinf,
     "sups": sups,
     "numr": numr,
     "dnom": dnom,
     "frac": frac,
+    "ordn": ordn,
 }
