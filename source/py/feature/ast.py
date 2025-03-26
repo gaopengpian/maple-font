@@ -23,7 +23,7 @@ class Clazz:
         return Line(f"{self.ref()} = {clazz(self.glyphs, self.cls)};")
 
 
-glyph_dict = {
+__glyph_map = {
     "{": "braceleft",
     "}": "braceright",
     "[": "bracketleft",
@@ -58,8 +58,6 @@ glyph_dict = {
     "~": "asciitilde",
 }
 
-glyph_dict_keys = glyph_dict.keys()
-
 
 def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if not g:
@@ -70,28 +68,38 @@ def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
         return g.ref()
     if not isinstance(g, str):
         raise TypeError(f"{g}({type(g)}) is invalid for __gly")
-    if g in glyph_dict_keys:
-        return glyph_dict[g]
+    if g in __glyph_map.keys():
+        return __glyph_map[g]
     return g
 
 
-def __arr(
-    data: str | Clazz | Sequence[str | Clazz],
-) -> str | Clazz | Sequence[str | Clazz]:
-    if isinstance(data, str) and " " in data:
-        return data.split(" ")
-    return data
+def gly(g: str, suffix: str | None = None):
+    """
+    Normalize glyph name.
+
+    If no suffix and ``g`` has ``" "``, suffix is ``".liga"``
+
+    >>> gly("_")
+    "underline"
+    >>> gly("++")
+    "plus_plus.liga"
+    >>> gly("--", ".suffix")
+    "hyphen_hyphen.suffix"
+    """
+    if len(g) > 1:
+        return "_".join(map(__gly, list(g))) + (suffix if suffix is not None else ".liga")
+    return __gly(g) + (suffix if suffix is not None else "")
 
 
 def __prefix(data: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if data:
-        return __gly(__arr(data)) + " "
+        return __gly(data) + " "
     return ""
 
 
 def __suffix(data: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if data:
-        return " " + __gly(__arr(data))
+        return " " + __gly(data)
     return ""
 
 
@@ -139,7 +147,7 @@ def cv(id: int, name: str, content: list[Line]) -> list[Line]:
     return feature(f"cv{id:02d}", [*param, *content])
 
 
-def ss(id: int, name: str, content: list[Line]) -> list[Line]:
+def ss(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     if id < 1 or id > 20:
         raise TypeError(f"id should > 0 and < 21 in Stylistic Sets, current is {id}")
 
@@ -178,9 +186,9 @@ def subst(
     """
     Generate substitution line.
 
-    >>> subst(['a'], 'b', 'c', 'd')
+    >>> subst(["a"], "b", "-", "d")
     [
-        Line("sub a b' c by d;")
+        Line("sub a b' hyphen by d;")
     ]
     """
     return __subst(
@@ -196,19 +204,15 @@ def subst_list_map(
     """
     Generate substitution lines for a list of glyphs with a specified suffix.
 
-    >>> subst_list_map(['Q', '{ {'], target_suffix='.cv01')
+    >>> subst_list_map(["Q", "{ {"], target_suffix=".cv01")
     [
-        Line('sub Q by Q.cv01;'),
-        Line('sub braceleft_braceleft.liga by braceleft_braceleft.liga.cv01;')
+        Line("sub Q by Q.cv01;"),
+        Line("sub braceleft_braceleft.liga by braceleft_braceleft.liga.cv01;")
     ]
     """
     result = []
     for g in glyphs:
-        if " " in g:
-            _g = "_".join(map(__gly, g.split(" "))) + ".liga"
-        else:
-            _g = __gly(g)
-        result.append(__subst(f"{_g}{source_suffix}", f"{_g}{target_suffix}"))
+        result.append(__subst(f"{g}{source_suffix}", f"{g}{target_suffix}"))
 
     return result
 
@@ -216,12 +220,17 @@ def subst_list_map(
 def subst_list_liga(
     source: str,
     target: str | None = None,
+    lookup_name: str | None = None,
     ignores: list[Line] | None = None,
 ):
     """
     Generate substitution lines for target ligature.
 
-    >>> sub_list_liga('!=')
+    Default ``target`` is ``gly(source)``
+
+    Default ``lookup_name`` is ``target``
+
+    >>> sub_list_liga("!=")
     [
         Line("lookup exclam_equal.liga {"),
         Line("sub exclam' equal by SPC;"),
@@ -232,8 +241,10 @@ def subst_list_liga(
     source_arr = list(source)
 
     if not target:
-        target = __gly("_".join(map(__gly, source_arr))) + ".liga"
+        target = gly(source)
 
+    if not lookup_name:
+        lookup_name = target
     # use default param value will cache previous data
     # so manually setup default value here
     if not ignores:
@@ -262,7 +273,7 @@ def subst_list_liga(
 
     final_rules = ignores
     final_rules.extend(subst_rules[::-1])
-    return lookup(target, final_rules)
+    return lookup(lookup_name, final_rules)
 
 
 def ignore(
@@ -270,10 +281,24 @@ def ignore(
     glyph: str,
     suffix: Sequence[str | Clazz] | None,
 ) -> Line:
+    """
+    Generate ignore line.
+
+    >>> ignore("{", "b", ["c", "d"])
+    Line("ignore sub braceleft b' c d;")
+    >>> ignore("_ _", "b", cls)
+    Line("ignore sub underscore underscore b' @cls;")
+    """
     return Line(f"ignore sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)};")
 
 
 def clazz(glyphs: list[str], cls: list[Clazz] = []) -> str:
+    """
+    Generate inline class.
+
+    >>> ignore(["a", "+", "@"], [cls])
+    "[@cls a plus at]"
+    """
     _content = [c.ref() for c in cls]
     for g in glyphs:
         _content.append(__gly(g))

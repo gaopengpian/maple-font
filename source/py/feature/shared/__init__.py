@@ -1,7 +1,7 @@
 import source.py.feature.ast as ast
-from source.py.feature.shared.feat.ccmp import ccmp_features
-from source.py.feature.shared.feat.number import number_features
-from source.py.feature.shared.feat.locl import locl_features
+from source.py.feature.shared.ccmp import ccmp_features
+from source.py.feature.shared.number import number_features
+from source.py.feature.shared.locl import locl_features
 
 def use_feat(tag: str):
     return ast.Line(f"feature {tag};")

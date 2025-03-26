@@ -1,0 +1,35 @@
+import source.py.feature.ast as ast
+
+cv02_subst = ast.subst_list_map(
+    [
+        "a",
+        "aacute",
+        "abreve",
+        "abreveacute",
+        "abrevedotbelow",
+        "abrevegrave",
+        "abrevehookabove",
+        "abrevetilde",
+        "acaron",
+        "acircumflex",
+        "acircumflexacute",
+        "acircumflexdotbelow",
+        "acircumflexgrave",
+        "acircumflexhookabove",
+        "acircumflextilde",
+        "adieresis",
+        "adotbelow",
+        "agrave",
+        "ahookabove",
+        "amacron",
+        "aogonek",
+        "aring",
+        "atilde",
+        "a-cy",
+        "ordfeminine",
+    ],
+    target_suffix=".cv02",
+)
+
+cv02_name = "Alternative a"
+cv02_regular = ast.cv(2, cv02_name, cv02_subst)
