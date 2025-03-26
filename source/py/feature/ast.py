@@ -99,9 +99,14 @@ def __subst(source: str, target: str) -> Line:
     return Line(f"sub {source} by {target};")
 
 
-def create(content: list[Line], indent=2) -> str:
+def create(cls: list[Clazz], content: list[Line], indent=2) -> str:
     _idt = indent * " "
-    return _idt.join([("\n" + _idt * c.level + c.text) for c in content])
+    return _idt.join(
+        [
+            ("\n" + _idt * c.level + c.text)
+            for c in ([c.state() for c in cls] + content)
+        ],
+    )
 
 
 def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
@@ -127,7 +132,7 @@ def cv(id: int, name: str, content: list[Line]) -> list[Line]:
     param = [
         Line("cvParameters {"),
         Line("FeatUILabelNameID {", 1),
-        Line(f'name "{name}"', 2),
+        Line(f'name "{name}";', 2),
         Line("};", 1),
         Line("};"),
     ]
@@ -140,7 +145,7 @@ def ss(id: int, name: str, content: list[Line]) -> list[Line]:
 
     param = [
         Line("featureNames {"),
-        Line(f'name "{name}"', 1),
+        Line(f'name "{name}";', 1),
         Line("};"),
     ]
     return feature(f"ss{id:02d}", [*param, *content])

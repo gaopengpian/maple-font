@@ -5,4 +5,4 @@ import source.py.feature.regular.feature as feat
 
 
 def generate_fea_string():
-    return ast.create([*lang.list, *clazz.list, *feat.list])
+    return ast.create(clazz.list, [*lang.list, *feat.list])

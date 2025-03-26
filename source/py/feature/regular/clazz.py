@@ -30,7 +30,7 @@ cls_y = ast.Clazz("Y", ["Y", "y"])
 cls_z = ast.Clazz("Z", ["Z", "z"])
 hex_letter = ast.Clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
 
-list = [c.state() for c in[
+list = [
     *list,
     cls_a,
     cls_b,
@@ -59,4 +59,4 @@ list = [c.state() for c in[
     cls_y,
     cls_z,
     hex_letter,
-]]
+]
