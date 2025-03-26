@@ -1,0 +1,9 @@
+import source.py.feature.ast as ast
+
+def cv36_subst():
+    return ast.subst_list_map(
+        ["x", ast.gly("x_l"), ast.gly("x_l", ".cv04"), ast.gly("x_l", ".cv35")],
+        target_suffix=".cv36",
+    )
+
+cv36_italic = ast.cv(36, "Italic x without top and bottom tails", cv36_subst())

@@ -73,22 +73,25 @@ def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
     return g
 
 
-def gly(g: str, suffix: str | None = None):
+def gly(g: str, suffix: str = "", overwrite=False):
     """
     Normalize glyph name.
 
-    If no suffix and ``g`` has ``" "``, suffix is ``".liga"``
+    If no suffix and ``len(g) > 1``, suffix is ``".liga"``
 
     >>> gly("_")
     "underline"
     >>> gly("++")
     "plus_plus.liga"
     >>> gly("--", ".suffix")
+    "hyphen_hyphen.liga.suffix"
+    >>> gly("--", ".suffix", True)
     "hyphen_hyphen.suffix"
     """
     if len(g) > 1:
-        return "_".join(map(__gly, list(g))) + (suffix if suffix is not None else ".liga")
-    return __gly(g) + (suffix if suffix is not None else "")
+        suf = suffix if overwrite else (".liga" + suffix)
+        return "_".join(map(__gly, list(g))) + suf
+    return __gly(g) + suffix
 
 
 def __prefix(data: str | Clazz | Sequence[str | Clazz] | None) -> str:
