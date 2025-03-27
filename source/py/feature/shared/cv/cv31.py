@@ -38,4 +38,6 @@ def cv31_subst():
         target_suffix=".cv31",
     )
 
-cv31_italic = ast.cv(31, "Italic a with top arm", cv31_subst())
+
+cv31_name = "Italic a with top arm"
+cv31_italic = ast.cv(31, cv31_name, cv31_subst())

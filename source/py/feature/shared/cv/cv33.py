@@ -1,5 +1,6 @@
 import source.py.feature.ast as ast
 
+
 def cv33_subst():
     return ast.subst_list_map(
         [
@@ -26,3 +27,7 @@ def cv33_subst():
         ],
         target_suffix=".cv33",
     )
+
+
+cv33_name = "Italic i and j with left bottom bar and horizen top bar"
+cv33_italic = ast.cv(33, cv33_name, cv33_subst())

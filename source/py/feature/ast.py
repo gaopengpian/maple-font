@@ -73,7 +73,7 @@ def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
     return g
 
 
-def gly(g: str, suffix: str = "", overwrite=False):
+def gly(g: str | list[str], suffix: str = "", overwrite=False):
     """
     Normalize glyph name.
 
@@ -221,7 +221,7 @@ def subst_list_map(
 
 
 def subst_list_liga(
-    source: str,
+    source: str | list[str],
     target: str | None = None,
     lookup_name: str | None = None,
     ignores: list[Line] | None = None,
@@ -275,7 +275,7 @@ def subst_list_liga(
         subst_rules.append(val)
 
     final_rules = ignores
-    final_rules.extend(subst_rules[::-1])
+    final_rules.extend(subst_rules)
     return lookup(lookup_name, final_rules)
 
 

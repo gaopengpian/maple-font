@@ -1,5 +1,6 @@
 import source.py.feature.ast as ast
 
+
 def cv37_subst():
     return ast.subst_list_map(
         [
@@ -16,4 +17,6 @@ def cv37_subst():
         target_suffix=".cv37",
     )
 
-cv37_italic = ast.cv(37, "Italic y with straight intersection", cv37_subst())
+
+cv37_name = "Italic y with straight intersection"
+cv37_italic = ast.cv(37, cv37_name, cv37_subst())

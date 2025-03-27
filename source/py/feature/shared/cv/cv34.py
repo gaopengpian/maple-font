@@ -5,4 +5,5 @@ def cv34_subst():
     return ast.subst_list_map(["k", "kcommaaccent"], target_suffix=".cv34")
 
 
-cv34_italic = ast.cv(34, "Italic k without center circle", cv34_subst())
+cv34_name = "Italic k without center circle"
+cv34_italic = ast.cv(34, cv34_name, cv34_subst())

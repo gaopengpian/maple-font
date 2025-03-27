@@ -1,7 +1,7 @@
 import source.py.feature.ast as ast
 from source.py.feature.shared import basic_features
 from source.py.feature.shared.cv import cv01, cv02, cv03, cv04
-from source.py.feature.shared.ss import ss01, ss02, ss04, ss05, ss07, ss08
+from source.py.feature.shared.ss import ss01, ss02, ss03, ss04, ss05, ss07, ss08
 
 calt = ast.feature(
     "calt",
@@ -39,7 +39,7 @@ list = [
     *cv04.cv04_regular,
     *ss01.ss01,
     *ss02.ss02,
-    # *ss03.ss03,
+    *ss03.ss03,
     *ss04.ss04,
     *ss05.ss05,
     *ss07.ss07,
