@@ -12,9 +12,9 @@ _number_list = [
     "eight",
     "nine",
 ]
-
-_number_list_numr = [f"{n}.numr" for n in _number_list]
-_number_list_dnom = [f"{n}.dnom" for n in _number_list]
+clazz_number = ast.clazz(_number_list)
+clazz_numr = ast.clazz([f"{n}.numr" for n in _number_list])
+clazz_dnom = ast.clazz([f"{n}.dnom" for n in _number_list])
 
 zero = ast.subst_list_map(
     ["zero", "zero.dnom", "zero.numr", "zeroinferior", "zerosuperior"], ".zero"
@@ -27,26 +27,28 @@ sups = ast.subst_list_map(_number_list, target_suffix="superior")
 numr = ast.subst_list_map(_number_list, target_suffix=".numr")
 dnom = ast.subst_list_map(_number_list, target_suffix=".dnom")
 ordn = [
-    ast.subst(ast.clazz(_number_list), ast.clazz(["A", "a"]), None, "ordfeminine"),
-    ast.subst(ast.clazz(_number_list), ast.clazz(["O", "o"]), None, "ordmasculine"),
+    ast.subst(clazz_number, ast.clazz(["A", "a"]), None, "ordfeminine"),
+    ast.subst(clazz_number, ast.clazz(["O", "o"]), None, "ordmasculine"),
 ]
 frac = [
-    *ast.lookup("FRAC", [ast.subst(None, "/", None, "fraction")]),
+    *ast.lookup("FRAC", "",[ast.subst(None, "/", None, "fraction")]),
     *ast.lookup(
         "UP",
-        [ast.subst(None, ast.clazz(_number_list), None, ast.clazz(_number_list_numr))],
+        None,
+        [ast.subst(None, clazz_number, None, clazz_numr)],
     ),
     *ast.lookup(
         "DOWN",
+        None,
         [
             ast.subst(
-                "fraction", ast.clazz(_number_list), None, ast.clazz(_number_list_numr)
+                "fraction", clazz_number, None, clazz_numr
             ),
             ast.subst(
-                ast.clazz(_number_list_dnom),
-                ast.clazz(_number_list_numr),
+                clazz_dnom,
+                clazz_numr,
                 None,
-                ast.clazz(_number_list_dnom),
+                clazz_dnom,
             ),
         ],
     ),

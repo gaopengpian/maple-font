@@ -1,37 +1,38 @@
 import source.py.feature.ast as ast
 
 
+i_acc = ast.subst(None, "i", None, "idotaccent")
 locl_0 = ast.lookup(
     "locl_latin_0",
+    None,
     [
         ast.script("latn"),
         ast.lang("AZE"),
-        ast.subst(None, "i", None, "idotaccent"),
+        i_acc,
         ast.lang("CRT"),
-        ast.subst(None, "i", None, "idotaccent"),
+        i_acc,
         ast.lang("KAZ"),
-        ast.subst(None, "i", None, "idotaccent"),
+        i_acc,
         ast.lang("TAT"),
-        ast.subst(None, "i", None, "idotaccent"),
+        i_acc,
         ast.lang("TRK"),
-        ast.subst(None, "i", None, "idotaccent"),
+        i_acc,
     ],
 )
 
-rule_glyphs_1 = ["S", "s", "T", "t"]
+st_acc = ast.subst_list_map(
+    ["S", "s", "T", "t"], source_suffix="cedilla", target_suffix="commaaccent"
+)
 
 locl_1 = ast.lookup(
     "locl_latin_1",
+    None,
     [
         ast.script("latn"),
         ast.lang("ROM"),
-        *ast.subst_list_map(
-            rule_glyphs_1, source_suffix="cedilla", target_suffix="commaaccent"
-        ),
+        *st_acc,
         ast.lang("MOL"),
-        *ast.subst_list_map(
-            rule_glyphs_1, source_suffix="cedilla", target_suffix="commaaccent"
-        ),
+        *st_acc,
     ],
 )
 
@@ -39,6 +40,7 @@ glyph_2 = "periodcentered"
 
 locl_2 = ast.lookup(
     "locl_latin_2",
+    None,
     [
         ast.script("latn"),
         ast.lang("CAT"),
@@ -49,11 +51,12 @@ locl_2 = ast.lookup(
 
 locl_3 = ast.lookup(
     "locl_latin_3",
+    None,
     [
         ast.script("latn"),
         ast.lang("NLD"),
-        ast.__subst("ij acutecomb'", "ij_acute"),
-        ast.__subst("IJ acutecomb'", "IJ_acute"),
+        ast.subst("ij", "acutecomb", None, "ij_acute"),
+        ast.subst("IJ", "acutecomb", None, "IJ_acute"),
     ],
 )
 

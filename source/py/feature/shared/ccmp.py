@@ -1,11 +1,84 @@
 import source.py.feature.ast as ast
-from source.py.feature.shared.clazz import (
-    comb_top_acc,
-    comb_non_top_acc,
-    marks_comb,
-    marks_comb_case,
-    upper,
+from source.py.feature.shared.clazz import uppercase
+
+
+comb_top_acc = ast.Clazz(
+    "CombiningTopAccents",
+    [
+        "acutecomb",
+        "brevecomb",
+        "caroncomb",
+        "circumflexcomb",
+        "commaturnedabovecomb",
+        "dblgravecomb",
+        "dieresiscomb",
+        "dotaccentcomb",
+        "gravecomb",
+        "hookabovecomb",
+        "hungarumlautcomb",
+        "macroncomb",
+        "ringcomb",
+        "tildecomb",
+    ],
 )
+
+comb_non_top_acc = ast.Clazz(
+    "CombiningNonTopAccents",
+    [
+        "cedillacomb",
+        "dotbelowcomb",
+        "ogonekcomb",
+        "ringbelowcomb",
+        "horncomb",
+        "slashlongcomb",
+        "slashshortcomb",
+        "strokelongcomb",
+    ],
+)
+
+marks = [
+    "dieresiscomb",
+    "dotaccentcomb",
+    "gravecomb",
+    "acutecomb",
+    "hungarumlautcomb",
+    "circumflexcomb",
+    "caroncomb",
+    "brevecomb",
+    "ringcomb",
+    "tildecomb",
+    "macroncomb",
+    "hookabovecomb",
+    "dblgravecomb",
+    "commaturnedabovecomb",
+    "horncomb",
+    "dotbelowcomb",
+    "commaaccentcomb",
+    "cedillacomb",
+    "ogonekcomb",
+    "dieresis",
+    "dotaccent",
+    "acute",
+    "hungarumlaut",
+    "circumflex",
+    "caron",
+    "breve",
+    "ring",
+    "tilde",
+    "macron",
+    "tonos",
+    "brevecomb_acutecomb",
+    "brevecomb_gravecomb",
+    "brevecomb_hookabovecomb",
+    "brevecomb_tildecomb",
+    "circumflexcomb_acutecomb",
+    "circumflexcomb_gravecomb",
+    "circumflexcomb_hookabovecomb",
+    "circumflexcomb_tildecomb",
+]
+
+marks_comb = ast.Clazz("MarksComb", marks)
+marks_comb_case = ast.Clazz("MarksCombCase", [f"{m}.case" for m in marks])
 
 
 def comb(config: list[list[str]]) -> list[ast.Line]:
@@ -21,6 +94,7 @@ def comb(config: list[list[str]]) -> list[ast.Line]:
 
 ccmp_latin = ast.lookup(
     "ccmp_latin",
+    None,
     comb(
         [
             ["breve", "acute"],
@@ -48,6 +122,7 @@ end_other = ast.clazz(
 
 ccmp_other = ast.lookup(
     "ccmp_other",
+    None,
     [
         ast.subst(
             None,
@@ -62,7 +137,7 @@ ccmp_other = ast.lookup(
             end_other,
         ),
         ast.subst(marks_comb, marks_comb, None, marks_comb_case),
-        ast.subst(upper, marks_comb, None, marks_comb_case),
+        ast.subst(uppercase, marks_comb, None, marks_comb_case),
         ast.subst(None, marks_comb, marks_comb_case, marks_comb_case),
         ast.subst(marks_comb, marks_comb_case, None, marks_comb_case),
     ],
@@ -71,9 +146,14 @@ ccmp_other = ast.lookup(
 ccmp_features = ast.feature(
     "ccmp",
     [
+        uppercase.state(),
+        comb_top_acc.state(),
+        comb_non_top_acc.state(),
+        marks_comb.state(),
+        marks_comb_case.state(),
         *ccmp_other,
         *ccmp_latin,
         ast.script("latn"),
-        ast.Line("lookup ccmp_latin;")
+        ast.Line("lookup ccmp_latin;"),
     ],
 )

@@ -11,7 +11,7 @@ ss08_subst = [
             ast.ignore(None, "<", ["<", "-", "-"]),
         ],
     ),
-    ast.subst("SPC", ast.gly("<<"), "-", "SPC"),
+    ast.subst(ast.SPC, ast.gly("<<"), "-", ast.SPC),
     #
     ast.subst_list_liga(
         "<<=",
@@ -21,7 +21,7 @@ ss08_subst = [
             ast.ignore(None, "<", ["<", "=", "="]),
         ],
     ),
-    ast.subst("SPC", ast.gly("<<"), "=", "SPC"),
+    ast.subst(ast.SPC, ast.gly("<<"), "=", ast.SPC),
     #
     ast.subst_list_liga(
         ">>-",
@@ -31,7 +31,7 @@ ss08_subst = [
             ast.ignore(None, ">", [">", "-", "-"]),
         ],
     ),
-    ast.subst("SPC", ast.gly(">>"), "-", "SPC"),
+    ast.subst(ast.SPC, ast.gly(">>"), "-", ast.SPC),
     #
     ast.subst_list_liga(
         ">>=",
@@ -41,7 +41,7 @@ ss08_subst = [
             ast.ignore(None, ">", [">", "=", "="]),
         ],
     ),
-    ast.subst("SPC", ast.gly(">>"), "=", "SPC"),
+    ast.subst(ast.SPC, ast.gly(">>"), "=", ast.SPC),
     #
     ast.subst_list_liga(
         "->>",
@@ -51,8 +51,8 @@ ss08_subst = [
             ast.ignore(None, "-", ["-", ">", ">"]),
         ],
     ),
-    ast.subst(None, "-", ["SPC", ast.gly(">>")], "SPC"),
-    ast.subst(None, "SPC", ["SPC", ast.gly(">>")], "SPC"),
+    ast.subst(None, "-", [ast.SPC, ast.gly(">>")], ast.SPC),
+    ast.subst(None, ast.SPC, [ast.SPC, ast.gly(">>")], ast.SPC),
     #
     ast.subst_list_liga(
         "=>>",
@@ -62,8 +62,8 @@ ss08_subst = [
             ast.ignore(None, "=", ["-", ">", ">"]),
         ],
     ),
-    ast.subst(None, "=", ["SPC", ast.gly(">>")], "SPC"),
-    ast.subst(None, "SPC", ["SPC", ast.gly(">>")], "SPC"),
+    ast.subst(None, "=", [ast.SPC, ast.gly(">>")], ast.SPC),
+    ast.subst(None, ast.SPC, [ast.SPC, ast.gly(">>")], ast.SPC),
     #
     ast.subst_list_liga(
         "-<<",
@@ -73,8 +73,8 @@ ss08_subst = [
             ast.ignore(None, "-", ["-", "<", "<"]),
         ],
     ),
-    ast.subst(None, "-", ["SPC", ast.gly("<<")], "SPC"),
-    ast.subst(None, "SPC", ["SPC", ast.gly("<<")], "SPC"),
+    ast.subst(None, "-", [ast.SPC, ast.gly("<<")], ast.SPC),
+    ast.subst(None, ast.SPC, [ast.SPC, ast.gly("<<")], ast.SPC),
     #
     ast.subst_list_liga(
         "=<<",
@@ -84,8 +84,8 @@ ss08_subst = [
             ast.ignore(None, "=", ["=", "<", "<"]),
         ],
     ),
-    ast.subst(None, "=", ["SPC", ast.gly("<<")], "SPC"),
-    ast.subst(None, "SPC", ["SPC", ast.gly("<<")], "SPC"),
+    ast.subst(None, "=", [ast.SPC, ast.gly("<<")], ast.SPC),
+    ast.subst(None, ast.SPC, [ast.SPC, ast.gly("<<")], ast.SPC),
     #
     ast.subst_list_liga(
         ">-",

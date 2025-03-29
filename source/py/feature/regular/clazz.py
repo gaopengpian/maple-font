@@ -30,8 +30,7 @@ cls_y = ast.Clazz("Y", ["Y", "y"])
 cls_z = ast.Clazz("Z", ["Z", "z"])
 hex_letter = ast.Clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
 
-list = [
-    *list,
+cls_letters = [
     cls_a,
     cls_b,
     cls_c,
@@ -58,5 +57,10 @@ list = [
     cls_x,
     cls_y,
     cls_z,
+]
+
+list = [
+    *list,
+    *cls_letters,
     hex_letter,
 ]

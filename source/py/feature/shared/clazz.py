@@ -8,24 +8,7 @@ digit = ast.Clazz(
     [zero, one],
 )
 
-space = ast.Clazz("Space", ["space", "nbspace"])
-
-normal_separator = ast.Clazz(
-    "NormalSeparator",
-    [
-        "[",
-        "]",
-        "{",
-        "}",
-        "(",
-        ")",
-        "|",
-        "/",
-        "\\",
-    ],
-)
-
-upper = ast.Clazz(
+uppercase = ast.Clazz(
     "Uppercase",
     [
         "A",
@@ -308,93 +291,10 @@ upper = ast.Clazz(
     ],
 )
 
-comb_top_acc = ast.Clazz(
-    "CombiningTopAccents",
-    [
-        "acutecomb",
-        "brevecomb",
-        "caroncomb",
-        "circumflexcomb",
-        "commaturnedabovecomb",
-        "dblgravecomb",
-        "dieresiscomb",
-        "dotaccentcomb",
-        "gravecomb",
-        "hookabovecomb",
-        "hungarumlautcomb",
-        "macroncomb",
-        "ringcomb",
-        "tildecomb",
-    ],
-)
-
-comb_non_top_acc = ast.Clazz(
-    "CombiningNonTopAccents",
-    [
-        "cedillacomb",
-        "dotbelowcomb",
-        "ogonekcomb",
-        "ringbelowcomb",
-        "horncomb",
-        "slashlongcomb",
-        "slashshortcomb",
-        "strokelongcomb",
-    ],
-)
-
-marks = [
-    "dieresiscomb",
-    "dotaccentcomb",
-    "gravecomb",
-    "acutecomb",
-    "hungarumlautcomb",
-    "circumflexcomb",
-    "caroncomb",
-    "brevecomb",
-    "ringcomb",
-    "tildecomb",
-    "macroncomb",
-    "hookabovecomb",
-    "dblgravecomb",
-    "commaturnedabovecomb",
-    "horncomb",
-    "dotbelowcomb",
-    "commaaccentcomb",
-    "cedillacomb",
-    "ogonekcomb",
-    "dieresis",
-    "dotaccent",
-    "acute",
-    "hungarumlaut",
-    "circumflex",
-    "caron",
-    "breve",
-    "ring",
-    "tilde",
-    "macron",
-    "tonos",
-    "brevecomb_acutecomb",
-    "brevecomb_gravecomb",
-    "brevecomb_hookabovecomb",
-    "brevecomb_tildecomb",
-    "circumflexcomb_acutecomb",
-    "circumflexcomb_gravecomb",
-    "circumflexcomb_hookabovecomb",
-    "circumflexcomb_tildecomb",
-]
-
-marks_comb = ast.Clazz("MarksComb", marks)
-marks_comb_case = ast.Clazz("MarksCombCase", [f"{m}.case" for m in marks])
 
 list = [
     zero,
     one,
     digit,
-    space,
-    normal_separator,
-    upper,
-    comb_top_acc,
-    comb_non_top_acc,
-    marks_comb,
-    marks_comb_case,
+    uppercase,
 ]

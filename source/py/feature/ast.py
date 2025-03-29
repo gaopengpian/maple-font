@@ -6,8 +6,8 @@ class Line:
         self.text = text
         self.level = level
 
-    def indent(self):
-        self.level += 1
+    def indent(self) -> "Line":
+        return Line(self.text, self.level + 1)
 
 
 class Clazz:
@@ -23,7 +23,7 @@ class Clazz:
         return Line(f"{self.ref()} = {clazz(self.glyphs, self.cls)};")
 
 
-__glyph_map = {
+__punctuation_map = {
     "{": "braceleft",
     "}": "braceright",
     "[": "bracketleft",
@@ -58,6 +58,8 @@ __glyph_map = {
     "~": "asciitilde",
 }
 
+total_punctuations = __punctuation_map.keys()
+
 
 def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if not g:
@@ -68,30 +70,9 @@ def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
         return g.ref()
     if not isinstance(g, str):
         raise TypeError(f"{g}({type(g)}) is invalid for __gly")
-    if g in __glyph_map.keys():
-        return __glyph_map[g]
+    if g in total_punctuations:
+        return __punctuation_map[g]
     return g
-
-
-def gly(g: str | list[str], suffix: str = "", overwrite=False):
-    """
-    Normalize glyph name.
-
-    If no suffix and ``len(g) > 1``, suffix is ``".liga"``
-
-    >>> gly("_")
-    "underline"
-    >>> gly("++")
-    "plus_plus.liga"
-    >>> gly("--", ".suffix")
-    "hyphen_hyphen.liga.suffix"
-    >>> gly("--", ".suffix", True)
-    "hyphen_hyphen.suffix"
-    """
-    if len(g) > 1:
-        suf = suffix if overwrite else (".liga" + suffix)
-        return "_".join(map(__gly, list(g))) + suf
-    return __gly(g) + suffix
 
 
 def __prefix(data: str | Clazz | Sequence[str | Clazz] | None) -> str:
@@ -110,6 +91,31 @@ def __subst(source: str, target: str) -> Line:
     return Line(f"sub {source} by {target};")
 
 
+SPC = "SPC"
+
+
+def gly(g: str | list[str], suffix: str = "", overwrite=False):
+    """
+    Normalize glyph name.
+
+    If no suffix and ``len(g) > 1``, suffix is ``".liga"``;
+    else suffix is ``""``
+
+    >>> gly("_")
+    "underline"
+    >>> gly("++")
+    "plus_plus.liga"
+    >>> gly("--", ".suffix")
+    "hyphen_hyphen.liga.suffix"
+    >>> gly("--", ".suffix", True)
+    "hyphen_hyphen.suffix"
+    """
+    if len(g) > 1:
+        suf = suffix if overwrite else (".liga" + suffix)
+        return "_".join(map(__gly, list(g))) + suf
+    return __gly(g) + suffix
+
+
 def create(cls: list[Clazz], content: list[Line], indent=2) -> str:
     _idt = indent * " "
     return _idt.join(
@@ -125,11 +131,9 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     for c in content:
         if isinstance(c, list):
             for i in c:
-                i.indent()
-                target.append(i)
+                target.append(i.indent())
         else:
-            c.indent()
-            target.append(c)
+            target.append(c.indent())
 
     return [Line(f"feature {tag} {{"), *target, Line(f"}} {tag};")]
 
@@ -174,10 +178,19 @@ def script(script: str) -> Line:
     return Line(f"script {script};")
 
 
-def lookup(name: str, content: list[Line]) -> list[Line]:
+def lookup(name: str, desc: str | None, content: list[Line]) -> list[Line]:
+    arr = []
+
+    if desc:
+        arr.append(Line(f"# {desc}"))
+
+    arr.append(Line(f"lookup {name} {{"))
+
     for c in content:
-        c.indent()
-    return [Line(f"lookup {name} {{"), *content, Line(f"}} {name};")]
+        arr.append(c.indent())
+
+    arr.append(Line(f"}} {name};"))
+    return arr
 
 
 def subst(
@@ -224,6 +237,7 @@ def subst_list_liga(
     source: str | list[str],
     target: str | None = None,
     lookup_name: str | None = None,
+    surround: list[list[Sequence[str | Clazz]]] = [],
     ignores: list[Line] | None = None,
 ):
     """
@@ -233,56 +247,80 @@ def subst_list_liga(
 
     Default ``lookup_name`` is ``target``
 
-    >>> sub_list_liga("!=")
-    [
-        Line("lookup exclam_equal.liga {"),
-        Line("sub exclam' equal by SPC;"),
-        Line("sub SPC equal' by exclam_equal.liga;"),
-        Line("} lookup exclam_equal.liga;"),
-    ]
+    Args:
+        source: The glyphs to form the ligature (e.g., "!=" or ["!", "="]).
+        target: The ligature glyph name; defaults to gly(source).
+        lookup_name: Name of the lookup block; defaults to target.
+        surround: List of [prefix, suffix] pairs specifying contexts for substitution.
+            Each prefix/suffix is ``Sequence[str | Clazz]``.
+            If empty, generates basic substitution rules without context.
+        ignores: List of ignore rules to include in the lookup.
+
+    Returns:
+        list[Line]: Lines forming a lookup block with substitution rules.
+
+    Examples:
+        >>> subst_list_liga("!=")
+        [
+            Line("lookup exclam_equal.liga {"),
+            Line("sub exclam' equal by SPC;"),
+            Line("sub SPC equal' by exclam_equal.liga;"),
+            Line("} lookup exclam_equal.liga;")
+        ]
+        >>> subst_list_liga("!=", surround=[[["a","b"], "c"], [cls, ["a","c"]]])
+        [
+            Line("lookup exclam_equal.liga {"),
+            Line("sub a b exclam' equal c by SPC;"),
+            Line("sub @cls exclam' equal a c by SPC;"),
+            Line("sub a b SPC equal' c by exclam_equal.liga;"),
+            Line("sub @cls SPC equal' a c by exclam_equal.liga;"),
+            Line("} lookup exclam_equal.liga;")
+        ]
     """
     source_arr = list(source)
-
     if not target:
         target = gly(source)
-
     if not lookup_name:
         lookup_name = target
-    # use default param value will cache previous data
-    # so manually setup default value here
-    if not ignores:
+    if ignores is None:
         ignores = []
 
+    def to_list(item):
+        if item is None:
+            return []
+        elif isinstance(item, (str, Clazz)):
+            return [item]
+        else:
+            return list(item)
+
     subst_rules = []
-    initial_prefix_len = len(source_arr) - 1
-    prefix_pool = ["SPC"] * initial_prefix_len
+    if not surround:
+        surround = [[[], []]]
 
-    subst_rules.append(
-        subst(
-            prefix_pool,
-            source[-1],
-            None,
-            target,
-        )
+    for prfx, sfx in surround:
+        prfx_list = to_list(prfx)
+        sfx_list = to_list(sfx)
+        n = len(source_arr)
+
+        for i in range(n - 1):
+            subst_prefix = prfx_list + [SPC] * i
+            subst_suffix = source_arr[i + 1 :] + sfx_list
+            subst_rules.append(subst(subst_prefix, source_arr[i], subst_suffix, SPC))
+
+        subst_prefix = prfx_list + [SPC] * (n - 1)
+        subst_rules.append(subst(subst_prefix, source_arr[-1], sfx_list, target))
+
+    return lookup(
+        lookup_name,
+        f"Ligature set for {source if isinstance(source, str) else lookup_name}",
+        ignores + subst_rules[::],
     )
-
-    for i in range(1, len(source_arr)):
-        prefix_len = len(source_arr) - i - 1
-        prefix = prefix_pool[:prefix_len]
-        current = source_arr[prefix_len]
-        suffix = source_arr[prefix_len + 1 :]
-        val = subst(prefix, current, suffix, "SPC")
-        subst_rules.append(val)
-
-    final_rules = ignores
-    final_rules.extend(subst_rules)
-    return lookup(lookup_name, final_rules)
 
 
 def ignore(
-    prefix: Sequence[str | Clazz] | None,
+    prefix: str | Clazz | Sequence[str | Clazz] | None,
     glyph: str,
-    suffix: Sequence[str | Clazz] | None,
+    suffix: str | Clazz | Sequence[str | Clazz] | None,
 ) -> Line:
     """
     Generate ignore line.
@@ -295,7 +333,7 @@ def ignore(
     return Line(f"ignore sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)};")
 
 
-def clazz(glyphs: list[str], cls: list[Clazz] = []) -> str:
+def clazz(glyphs: list[str] = [], cls: list[Clazz] = []) -> str:
     """
     Generate inline class.
 
