@@ -4,6 +4,7 @@ sources:
 axisOrder:
   - wght
 familyName: Maple Mono
+removeOutlineOverlaps: false
 stat:
   MapleMono[wght].ttf:
   - name: Weight
