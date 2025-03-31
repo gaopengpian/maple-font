@@ -118,15 +118,30 @@ def gly(g: str | list[str], suffix: str = "", overwrite=False):
 
 def create(cls: list[Clazz], content: list[Line], indent=2) -> str:
     _idt = indent * " "
-    return _idt.join(
-        [
-            ("\n" + _idt * c.level + c.text)
-            for c in ([c.state() for c in cls] + content)
-        ],
-    )
+    lines: list[Line] = []
+
+    for line in [c.state() for c in cls] + content:
+        if line.text.startswith("#") or (
+            line.text.startswith("feature ") and line.text.endswith("{")
+        ):
+            lines.append(Line(""))
+        lines.append(line)
+
+    return "".join([("\n" + _idt * c.level + c.text) for c in lines])[1:]
 
 
 def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
+    """Generate a feature block with indented content.
+    This function creates a feature block with the specified tag and content,
+    formatting it according to the OpenType feature file syntax.
+
+    >>> feature('liga', [subst('a', 'b', 'c', 'd')])
+    [
+        Line("feature liga {"),
+        Line("sub a b' c by d"),
+        Line("} liga;")
+    ]
+    """
     target = []
     for c in content:
         if isinstance(c, list):
@@ -135,17 +150,32 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
         else:
             target.append(c.indent())
 
-    return [Line(""), Line(f"feature {tag} {{"), *target, Line(""), Line(f"}} {tag};")]
+    return [Line(f"feature {tag} {{"), *target, Line(f"}} {tag};")]
 
 
 def cv(id: int, name: str, content: list[Line]) -> list[Line]:
+    """
+    Generate Character Variants (cv) OpenType feature.
+    Raises:
+        TypeError: If id is not between 1 and 99.
+    Example:
+        >>> cv(1, "Alternate a", [Line("sub a by a.alt;")])
+        [
+            Line("feature cv01 {"),
+            Line("cvParameters {"),
+            Line("FeatUILabelNameID {", 1),
+            Line('name "Alternate a";', 2),
+            Line("};", 1),
+            Line("sub a by a.alt"),
+            Line("};"),
+        ]
+    """
     if id < 1 or id > 99:
         raise TypeError(
             f"id should > 0 and < 100 in Character Variants, current is {id}"
         )
 
     param = [
-        Line(""),
         Line("cvParameters {"),
         Line("FeatUILabelNameID {", 1),
         Line(f'name "{name}";', 2),
@@ -156,11 +186,25 @@ def cv(id: int, name: str, content: list[Line]) -> list[Line]:
 
 
 def ss(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
+    """
+    Creates stylistic set (ss) OpenType feature.
+    Raises:
+        TypeError: If the ID is not between 1 and 20
+    Example:
+        >>> ss(1, "Stylistic Set 1", [Line("sub a by a.ss01;")])
+        [
+            Line("feature ss01 {"),
+            Line("featureNames {", 1),
+            Line('name "Stylistic Set 1";', 2),
+            Line("};", 1),
+            Line("sub a by a.ss01;", 1),
+            Line("};")
+        ]
+    """
     if id < 1 or id > 20:
         raise TypeError(f"id should > 0 and < 21 in Stylistic Sets, current is {id}")
 
     param = [
-        Line(""),
         Line("featureNames {"),
         Line(f'name "{name}";', 1),
         Line("};"),
@@ -181,7 +225,18 @@ def script(script: str) -> Line:
 
 
 def lookup(name: str, desc: str | None, content: list[Line]) -> list[Line]:
-    arr = [Line("")]
+    """
+    Generate lookup table.
+
+    >>> lookup("example", "Replace a with b", [Line("sub a by b;")])
+    [
+        Line("# Replace a with b"),
+        Line("lookup example {"),
+        Line("sub a by b;"),
+        Line("} example;")
+    ]
+    """
+    arr = []
 
     if desc:
         arr.append(Line(f"# {desc}"))
@@ -325,7 +380,7 @@ def ignore(
     suffix: str | Clazz | Sequence[str | Clazz] | None,
 ) -> Line:
     """
-    Generate ignore line.
+    Generate ignore rule.
 
     >>> ignore("{", "b", ["c", "d"])
     Line("ignore sub braceleft b' c d;")
