@@ -277,7 +277,7 @@ def subst_list_map(
     """
     Generate substitution lines for a list of glyphs with a specified suffix.
 
-    >>> subst_list_map(["Q", "{ {"], target_suffix=".cv01")
+    >>> subst_list_map(["Q", "braceleft_braceleft.liga"], target_suffix=".cv01")
     [
         Line("sub Q by Q.cv01;"),
         Line("sub braceleft_braceleft.liga by braceleft_braceleft.liga.cv01;")
