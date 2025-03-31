@@ -4,7 +4,7 @@ from source.py.feature import ast
 def liga_cls(text: str):
     arr = ["["] + [f"@{g.upper()}" for g in list(text)] + ["]"]
     return ast.subst_list_liga(
-        arr, target=f"tag_{text}.liga", lookup_name=f"tag_{text}.liga.ss03"
+        arr, target=f"badge_{text}.liga", lookup_name=f"badge_{text}.liga.ss03"
     )
 
 

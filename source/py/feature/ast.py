@@ -20,7 +20,7 @@ class Clazz:
         return f"@{self.name}"
 
     def state(self) -> Line:
-        return Line(f"{self.ref()} = {clazz(self.glyphs, self.cls)};")
+        return Line(f"{self.ref()} = {clazz([*self.glyphs, *self.cls])};")
 
 
 __punctuation_map = {
@@ -390,14 +390,11 @@ def ignore(
     return Line(f"ignore sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)};")
 
 
-def clazz(glyphs: list[str] = [], cls: list[Clazz] = []) -> str:
+def clazz(glyphs: Sequence[str | Clazz] = []) -> str:
     """
     Generate inline class.
 
     >>> ignore(["a", "+", "@"], [cls])
     "[@cls a plus at]"
     """
-    _content = [c.ref() for c in cls]
-    for g in glyphs:
-        _content.append(__gly(g))
-    return "[" + " ".join(_content) + "]"
+    return "[" + " ".join([__gly(g) for g in glyphs]) + "]"

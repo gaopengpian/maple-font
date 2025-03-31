@@ -27,13 +27,6 @@ def get_lookup():
             ],
         ),
         ast.subst_list_liga(
-            "__",
-            ignores=[
-                ast.ignore(ast.clazz(["_", "#"]), "_", "_"),
-                ast.ignore(None, "_", ["_", "_"]),
-            ],
-        ),
-        ast.subst_list_liga(
             "||",
             ignores=[
                 ast.ignore(ast.clazz(["|", "["]), "|", "|"),

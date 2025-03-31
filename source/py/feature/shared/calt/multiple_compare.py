@@ -17,10 +17,10 @@ def get_lookup(letter_list: list[ast.Clazz]):
     surround = [
         [var, [space, ast.SPC, leading_symbol_liga]],
         [var, [ast.SPC, leading_symbol_liga]],
-        [var, ast.clazz(cls=[var, number])],
-        [ast.clazz(cls=[space, eh, symbol_before_greater]), None],
+        [var, ast.clazz([var, number])],
+        [ast.clazz([space, eh, symbol_before_greater]), None],
         [None, [space, number]],
-        [None, ast.clazz(["/"], [number, eh])],
+        [None, ast.clazz(["/", number, eh])],
         ["`", "`"],
     ]
 

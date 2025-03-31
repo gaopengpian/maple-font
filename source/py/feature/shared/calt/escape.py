@@ -2,16 +2,17 @@ from source.py.feature import ast
 
 
 def get_lookup():
-    esc = ast.Clazz("Escape", list(ast.total_punctuations))
-    esc_liga = ast.gly("\\", ".liga")
+    escape_cls = ast.Clazz("Escape", list(ast.total_punctuations))
+    escape_liga = ast.gly("\\", ".liga")
     return [
+        escape_cls.state(),
         ast.lookup(
             "escape",
             "Thin backslash (\\) to better distingish escape chars",
             [
-                ast.ignore(esc_liga, "\\", esc),
+                ast.ignore(escape_liga, "\\", escape_cls),
                 ast.ignore(None, "\\", ["%", "%"]),
-                ast.subst(None, "\\", esc, esc_liga),
+                ast.subst(None, "\\", escape_cls, escape_liga),
             ],
         )
     ]

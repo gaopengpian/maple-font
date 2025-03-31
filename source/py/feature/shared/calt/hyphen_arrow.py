@@ -21,15 +21,6 @@ def get_lookup():
         ),
         ast.subst_list_liga("<!---->", target="xml_empty_comment.liga"),
         ast.subst_list_liga(
-            "<-",
-            ignores=[
-                ast.ignore("<", "<", "-"),
-                ast.ignore(
-                    None, "<", ["-", ast.clazz(["-", "<", ">", "|", "/"], [digit])]
-                ),
-            ],
-        ),
-        ast.subst_list_liga(
             "<->",
             ignores=[
                 ast.ignore("<", "<", ["-", ">"]),
@@ -47,7 +38,7 @@ def get_lookup():
             "<-",
             ignores=[
                 ast.ignore(
-                    None, "<", ["-", ast.clazz(["-", "<", ">", "|", "+", "/"], [digit])]
+                    None, "<", ["-", ast.clazz(["-", "<", ">", "|", "+", "/", digit])]
                 ),
                 ast.ignore("<", "<", "-"),
             ],

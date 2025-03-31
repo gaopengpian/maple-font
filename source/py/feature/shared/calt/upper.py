@@ -3,7 +3,7 @@ from source.py.feature.shared.clazz import digit, uppercase
 
 
 def get_lookup():
-    pre = ast.clazz(cls=[digit, uppercase])
+    pre = ast.clazz([digit, uppercase])
     dbls = "germandbls"
     dbls_calt = f"{dbls}.calt"
     return [
