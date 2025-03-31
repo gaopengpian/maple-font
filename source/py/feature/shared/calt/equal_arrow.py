@@ -25,14 +25,16 @@ def get_lookup():
             ignores=[
                 ast.ignore(ast.clazz([">", "="]), ">", "="),
                 ast.ignore(
-                    None, ">", ast.clazz(["<", ">", "=", "?", normal_separator])
+                    None, ">", ["=", ast.clazz(["<", ">", "=", "?", normal_separator])]
                 ),
             ],
         ),
         ast.subst_list_liga(
             "<=",
             ignores=[
-                ast.ignore(None, "<", ast.clazz(["<", ">", "=", normal_separator])),
+                ast.ignore(
+                    None, "<", ["=", ast.clazz(["<", ">", "=", normal_separator])]
+                ),
                 ast.ignore(ast.clazz(["<", "="]), "<", "="),
                 ast.ignore(["(", "?"], "<", "="),
             ],

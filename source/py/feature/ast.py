@@ -364,15 +364,15 @@ def subst_list_liga(
         for i in range(n - 1):
             subst_prefix = prfx_list + [SPC] * i
             subst_suffix = source_arr[i + 1 :] + sfx_list
-            subst_rules.append(subst(subst_prefix, source_arr[i], subst_suffix, SPC))
+            subst_rules.insert(0, subst(subst_prefix, source_arr[i], subst_suffix, SPC))
 
         subst_prefix = prfx_list + [SPC] * (n - 1)
-        subst_rules.append(subst(subst_prefix, source_arr[-1], sfx_list, target))
+        subst_rules.insert(0, subst(subst_prefix, source_arr[-1], sfx_list, target))
 
     return lookup(
         lookup_name,
         f"Ligature rules for {source if isinstance(source, str) else lookup_name}",
-        ignores + subst_rules[::],
+        ignores + subst_rules,
     )
 
 
