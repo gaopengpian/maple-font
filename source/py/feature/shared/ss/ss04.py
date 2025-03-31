@@ -3,8 +3,8 @@ from source.py.feature import ast
 
 ss04_subst = ast.subst_list_map(
     [
-        ast.gly("__"),
-        ast.gly("#__"),
+        "__",
+        "#__",
     ],
     target_suffix=".ss04",
 )

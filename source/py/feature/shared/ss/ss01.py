@@ -3,11 +3,11 @@ from source.py.feature import ast
 
 ss01_subst = ast.subst_list_map(
     [
-        ast.gly("=="),
-        ast.gly("==="),
-        ast.gly("!="),
-        ast.gly("!=="),
-        ast.gly("=/="),
+        "==",
+        "===",
+        "!=",
+        "!==",
+        "=/=",
     ],
     target_suffix=".ss01",
 )

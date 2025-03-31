@@ -3,8 +3,8 @@ from source.py.feature import ast
 
 ss02_subst = ast.subst_list_map(
     [
-        ast.gly("<="),
-        ast.gly(">="),
+        "<=",
+        ">=",
     ],
     target_suffix=".ss02",
 )

@@ -135,7 +135,7 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     This function creates a feature block with the specified tag and content,
     formatting it according to the OpenType feature file syntax.
 
-    >>> feature('liga', [subst('a', 'b', 'c', 'd')])
+    >>> feature("liga", [subst("a", "b", "c", "d")])
     [
         Line("feature liga {"),
         Line("sub a b' c by d"),
@@ -277,15 +277,17 @@ def subst_list_map(
     """
     Generate substitution lines for a list of glyphs with a specified suffix.
 
-    >>> subst_list_map(["Q", "braceleft_braceleft.liga"], target_suffix=".cv01")
+    >>> subst_list_map(["Q", "all", "{{"], target_suffix=".cv01")
     [
         Line("sub Q by Q.cv01;"),
+        Line("sub all by all.cv01;"),
         Line("sub braceleft_braceleft.liga by braceleft_braceleft.liga.cv01;")
     ]
     """
     result = []
     for g in glyphs:
-        result.append(__subst(f"{g}{source_suffix}", f"{g}{target_suffix}"))
+        _g = gly(list(g)) if g[0] in total_punctuations else g
+        result.append(__subst(f"{_g}{source_suffix}", f"{_g}{target_suffix}"))
 
     return result
 
