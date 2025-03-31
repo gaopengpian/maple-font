@@ -10,4 +10,4 @@ ss02_subst = ast.subst_list_map(
 )
 
 ss02_name = "Broken compare and equal ligatures"
-ss02 = ast.ss(2, ss02_name, ss02_subst)
+ss02_feat = ast.ss(2, ss02_name, ss02_subst)

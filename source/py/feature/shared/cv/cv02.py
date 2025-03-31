@@ -32,4 +32,4 @@ cv02_subst = ast.subst_list_map(
 )
 
 cv02_name = "Alternative a"
-cv02_regular = ast.cv(2, cv02_name, cv02_subst)
+cv02_feat_regular = ast.cv(2, cv02_name, cv02_subst)

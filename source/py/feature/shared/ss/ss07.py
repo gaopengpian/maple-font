@@ -19,4 +19,4 @@ ss07_subst = [
 ]
 
 ss07_name = "Break connected strokes between italic letters"
-ss07 = ast.ss(7, ss07_name, ss07_subst)
+ss07_feat = ast.ss(7, ss07_name, ss07_subst)

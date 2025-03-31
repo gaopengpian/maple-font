@@ -41,5 +41,5 @@ cv04_subst_i = ast.subst_list_map(
 )
 
 cv04_name = "Alternative l"
-cv04_regular = ast.cv(4, cv04_name, cv04_subst)
-cv04_italic = ast.cv(4, cv04_name, cv04_subst_i)
+cv04_feat_regular = ast.cv(4, cv04_name, cv04_subst)
+cv04_feat_italic = ast.cv(4, cv04_name, cv04_subst_i)

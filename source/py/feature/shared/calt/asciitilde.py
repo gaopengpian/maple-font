@@ -1,16 +1,69 @@
 from source.py.feature import ast
 
 
-# todo))
-def get_asciitilde_lookup():
+def get_lookup():
     return [
-        ast.subst_list_liga("<~"),
-        ast.subst_list_liga("~>"),
-        ast.subst_list_liga("~~"),
-        ast.subst_list_liga("<~>"),
-        ast.subst_list_liga("<~~"),
-        ast.subst_list_liga("~~>"),
-        ast.subst_list_liga("-~"),
-        ast.subst_list_liga("~-"),
-        ast.subst_list_liga("~@"),
+        ast.subst_list_liga(
+            "<~",
+            ignores=[
+                ast.ignore("<", "<", "~"),
+                ast.ignore(None, "<", ["~", ast.clazz(["~", ">"])]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "~>",
+            ignores=[
+                ast.ignore("~", "~", ">"),
+                ast.ignore(None, "~", ["~", ">"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "~~",
+            ignores=[
+                ast.ignore(ast.clazz(["~", "<"]), "~", "~"),
+                ast.ignore(None, "~", ["~", ast.clazz(["~", ">"])]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<~>",
+            ignores=[
+                ast.ignore("<", "<", ["~", ">"]),
+                ast.ignore(None, "<", ["~", ">", ">"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<~~",
+            ignores=[
+                ast.ignore("<", "<", ["~", "~"]),
+                ast.ignore(None, "<", ["~", "~", ast.clazz(["~", ">"])]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "~~>",
+            ignores=[
+                ast.ignore(ast.clazz(["~", ">"]), "~", ["~", ">"]),
+                ast.ignore(None, "~", ["~", ">", ">"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "-~",
+            ignores=[
+                ast.ignore("-", "-", "~"),
+                ast.ignore(None, "-", ["~", "~"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "~-",
+            ignores=[
+                ast.ignore("~", "~", "-"),
+                ast.ignore(None, "~", ["-", "-"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "~@",
+            ignores=[
+                ast.ignore("~", "~", "@"),
+                ast.ignore(None, "~", ["@", "@"]),
+            ],
+        ),
     ]

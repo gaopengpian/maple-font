@@ -1,17 +1,46 @@
 from source.py.feature import ast
 
-# todo))
-def get_markup_like_lookup():
+
+def get_lookup():
     return [
-        ast.subst_list_liga("<>"),
-        ast.subst_list_liga("</"),
-        ast.subst_list_liga("/>"),
-        ast.subst_list_liga("</>"),
-        ast.subst_list_liga("<+"),
-        ast.subst_list_liga("+>"),
-        ast.subst_list_liga("<+>"),
-        ast.subst_list_liga("<*"),
-        ast.subst_list_liga("*>"),
-        ast.subst_list_liga("<*>"),
-        ast.subst_list_liga("<!---->"),
+        ast.subst_list_liga("<>",ignores=[
+            ast.ignore('<', '<', '>'),
+            ast.ignore(None, '<', ['>', '>']),
+        ]),
+        ast.subst_list_liga("</",ignores=[
+            ast.ignore('<', '<', '/'),
+            ast.ignore(None, '<', ['/', '/']),
+        ]),
+        ast.subst_list_liga("/>",ignores=[
+            ast.ignore('/', '/', '>'),
+            ast.ignore(None, '/', ['>', '>']),
+        ]),
+        ast.subst_list_liga("</>",ignores=[
+            ast.ignore(['<', '<'], '/', '>'),
+            ast.ignore(None, '<', ['/', '>', '>']),
+        ]),
+        ast.subst_list_liga("<+",ignores=[
+            ast.ignore('<', '<', '+'),
+            ast.ignore(None, '<', ['+', '+']),
+        ]),
+        ast.subst_list_liga("+>",ignores=[
+            ast.ignore('+', '+', '>'),
+            ast.ignore(None, '+', ['>', '>']),
+        ]),
+        ast.subst_list_liga("<+>",ignores=[
+            ast.ignore(['<', '<'], '+', '>'),
+            ast.ignore(None, '<', ['+', '>', '>']),
+        ]),
+        ast.subst_list_liga("<*",ignores=[
+            ast.ignore('<', '<', '*'),
+            ast.ignore(None, '<', ['*', '*']),
+        ]),
+        ast.subst_list_liga("*>",ignores=[
+            ast.ignore('*', '*', '>'),
+            ast.ignore(None, '*', ['>', '>']),
+        ]),
+        ast.subst_list_liga("<*>",ignores=[
+            ast.ignore(['<', '<'], '*', '>'),
+            ast.ignore(None, '<', ['*', '>', '>']),
+        ]),
     ]

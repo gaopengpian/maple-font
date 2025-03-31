@@ -26,4 +26,4 @@ ss06_subst = ast.subst_list_map(
 )
 
 ss06_name = "Break connected strokes between italic letters"
-ss06 = ast.ss(6, ss06_name, ss06_subst)
+ss06_feat = ast.ss(6, ss06_name, ss06_subst)

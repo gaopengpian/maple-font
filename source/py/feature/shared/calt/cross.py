@@ -2,7 +2,7 @@ from source.py.feature import ast
 from source.py.feature.shared.clazz import zero, digit
 
 
-def get_cross_lookup(hex_letter: ast.Clazz):
+def get_lookup(hex_letter: ast.Clazz):
     return [
         ast.lookup(
             "cross",

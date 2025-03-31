@@ -37,5 +37,5 @@ def cv01_subst():
     )
 
 cv01_name = "Normalize Special Symbols"
-cv01_regular = ast.cv(1, cv01_name, cv01_subst())
-cv01_italic = ast.cv(1, cv01_name, cv01_subst())
+cv01_feat_regular = ast.cv(1, cv01_name, cv01_subst())
+cv01_feat_italic = ast.cv(1, cv01_name, cv01_subst())

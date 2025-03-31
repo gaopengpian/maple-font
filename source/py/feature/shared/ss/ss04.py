@@ -10,4 +10,4 @@ ss04_subst = ast.subst_list_map(
 )
 
 ss04_name = "Broken multiple underscores ligatures"
-ss04 = ast.ss(4, ss04_name, ss04_subst)
+ss04_feat = ast.ss(4, ss04_name, ss04_subst)

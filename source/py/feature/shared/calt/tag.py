@@ -17,7 +17,7 @@ def any_tag(text: str):
     )
 
 
-def get_tag_lookup():
+def get_lookup():
     return [
         upper_tag("trace"),
         upper_tag("debug"),

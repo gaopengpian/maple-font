@@ -1,7 +1,7 @@
 from source.py.feature import ast
 
 
-def get_brace_lookup():
+def get_lookup():
     return [
         ast.subst_list_liga(
             "{{",

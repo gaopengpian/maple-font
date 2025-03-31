@@ -1,6 +1,6 @@
 import source.py.feature.ast as ast
 
-list = ast.langsys_list(
+lang_list = ast.langsys_list(
     [
         ["DFLT", "dflt"],
         ["latn", "dflt"],

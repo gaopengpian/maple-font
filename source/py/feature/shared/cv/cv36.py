@@ -9,4 +9,4 @@ def cv36_subst():
 
 
 cv36_name = "Italic x without top and bottom tails"
-cv36_italic = ast.cv(36, cv36_name, cv36_subst())
+cv36_feat_italic = ast.cv(36, cv36_name, cv36_subst())

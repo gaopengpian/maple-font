@@ -21,4 +21,4 @@ cv03_subst = ast.subst_list_map(
 )
 
 cv03_name = "Alternative i"
-cv03_regular = ast.cv(3, cv03_name, cv03_subst)
+cv03_feat_regular = ast.cv(3, cv03_name, cv03_subst)

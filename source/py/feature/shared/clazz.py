@@ -291,10 +291,25 @@ uppercase = ast.Clazz(
     ],
 )
 
+normal_separator = ast.Clazz(
+    "NormalSeparator",
+    [
+        "{",
+        "}",
+        "[",
+        "]",
+        "(",
+        ")",
+        "|",
+        "/",
+        "\\",
+    ],
+)
 
-list = [
+basic_class_list = [
     zero,
     one,
     digit,
     uppercase,
+    normal_separator,
 ]

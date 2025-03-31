@@ -1,5 +1,5 @@
 import source.py.feature.ast as ast
-from source.py.feature.shared.clazz import list
+from source.py.feature.shared.clazz import basic_class_list
 
 
 cls_a = ast.Clazz("A", ["A", "a", "a.cv02"])
@@ -30,7 +30,7 @@ cls_y = ast.Clazz("Y", ["Y", "y"])
 cls_z = ast.Clazz("Z", ["Z", "z"])
 hex_letter = ast.Clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
 
-cls_letters = [
+cls_letters_list = [
     cls_a,
     cls_b,
     cls_c,
@@ -59,8 +59,8 @@ cls_letters = [
     cls_z,
 ]
 
-list = [
-    *list,
-    *cls_letters,
+class_list = [
+    *basic_class_list,
+    *cls_letters_list,
     hex_letter,
 ]

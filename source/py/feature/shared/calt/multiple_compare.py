@@ -2,7 +2,7 @@ from source.py.feature import ast
 from source.py.feature.shared.clazz import digit
 
 
-def multiple_compare_lookup(letter_list: list[ast.Clazz]):
+def get_lookup(letter_list: list[ast.Clazz]):
     var = ast.Clazz("Var", ["_", ast.gly("__")], [*letter_list, digit])
     space = ast.Clazz("Space", ["space", "nbspace"])
     leading_symbol_liga = ast.Clazz(

@@ -146,7 +146,6 @@ ccmp_other = ast.lookup(
 ccmp_features = ast.feature(
     "ccmp",
     [
-        uppercase.state(),
         comb_top_acc.state(),
         comb_non_top_acc.state(),
         marks_comb.state(),

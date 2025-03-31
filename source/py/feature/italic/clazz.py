@@ -1,5 +1,5 @@
 import source.py.feature.ast as ast
-from source.py.feature.shared.clazz import list
+from source.py.feature.shared.clazz import basic_class_list
 
 
 cls_a = ast.Clazz("A", ["A", "a", "a.cv31"])
@@ -42,8 +42,8 @@ a_l = ast.Clazz(
     ],
 )
 
-classes = [
-    *list,
+class_list = [
+    *basic_class_list,
     cls_a,
     cls_b,
     cls_c,

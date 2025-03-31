@@ -1,7 +1,7 @@
 from source.py.feature import ast
 
 
-def whitespace_lookup():
+def get_lookup():
     return [
         ast.subst_list_liga(
             "[|",

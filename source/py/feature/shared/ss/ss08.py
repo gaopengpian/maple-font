@@ -106,4 +106,4 @@ ss08_subst = [
 ]
 
 ss08_name = "Double headed arrows and reverse arrows ligatures"
-ss08 = ast.ss(8, ss08_name, ss08_subst)
+ss08_feat = ast.ss(8, ss08_name, ss08_subst)

@@ -1,17 +1,97 @@
 from source.py.feature import ast
+from source.py.feature.shared.clazz import digit
 
-# todo))
-def get_hyphen_arrow_lookup():
+
+def get_lookup():
     return [
-        ast.subst_list_liga("<!--"),
-        ast.subst_list_liga("<#--"),
-        ast.subst_list_liga("<-"),
-        ast.subst_list_liga("<->"),
-        ast.subst_list_liga("-->"),
-        ast.subst_list_liga("->"),
-        ast.subst_list_liga("<--"),
-        ast.subst_list_liga("<-<"),
-        ast.subst_list_liga(">->"),
-        ast.subst_list_liga("<-|"),
-        ast.subst_list_liga("|->"),
+        ast.subst_list_liga(
+            "<!--",
+            ignores=[
+                ast.ignore("<", "<", ["!", "-", "-"]),
+                ast.ignore(["(", "?"], "<", ["!", "-", "-"]),
+                ast.ignore(None, "<", ["!", "-", "-", "-"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<#--",
+            ignores=[
+                ast.ignore("<", "<", ["#", "-", "-"]),
+                ast.ignore(None, "<", ["#", "-", "-", "-"]),
+            ],
+        ),
+        ast.subst_list_liga("<!---->", target="xml_empty_comment.liga"),
+        ast.subst_list_liga(
+            "<-",
+            ignores=[
+                ast.ignore("<", "<", "-"),
+                ast.ignore(
+                    None, "<", ["-", ast.clazz(["-", "<", ">", "|", "/"], [digit])]
+                ),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<->",
+            ignores=[
+                ast.ignore("<", "<", ["-", ">"]),
+                ast.ignore(None, "<", ["-", ">", ">"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "->",
+            ignores=[
+                ast.ignore(ast.clazz(["-", "<", ">", "|", "+"]), "-", ">"),
+                ast.ignore(None, "-", [">", ">"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<-",
+            ignores=[
+                ast.ignore(
+                    None, "<", ["-", ast.clazz(["-", "<", ">", "|", "+", "/"], [digit])]
+                ),
+                ast.ignore("<", "<", "-"),
+            ],
+        ),
+        ast.subst_list_liga(
+            "-->",
+            ignores=[
+                ast.ignore("-", "-", ["-", ">"]),
+                ast.ignore(None, "-", ["-", ">", ">"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<--",
+            ignores=[
+                ast.ignore("<", "<", ["-", "-"]),
+                ast.ignore(None, "<", ["-", "-", "-"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<-<",
+            ignores=[
+                ast.ignore("<", "<", ["-", "<"]),
+                ast.ignore(None, "<", ["-", "<", "<"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            ">->",
+            ignores=[
+                ast.ignore(">", ">", ["-", ">"]),
+                ast.ignore(None, ">", ["-", ">", ">"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "<-|",
+            ignores=[
+                ast.ignore("<", "<", ["-", "|"]),
+                ast.ignore(None, "<", ["-", "|", "|"]),
+            ],
+        ),
+        ast.subst_list_liga(
+            "|->",
+            ignores=[
+                ast.ignore("|", "|", ["-", ">"]),
+                ast.ignore(None, "|", ["-", ">", ">"]),
+            ],
+        ),
     ]

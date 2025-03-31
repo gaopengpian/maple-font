@@ -1,7 +1,7 @@
 from source.py.feature import ast
 
 
-def get_escape_lookup():
+def get_lookup():
     esc = ast.Clazz("Escape", list(ast.total_punctuations))
     esc_liga = ast.gly("\\", ".liga")
     return [

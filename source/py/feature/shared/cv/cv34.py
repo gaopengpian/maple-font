@@ -6,4 +6,4 @@ def cv34_subst():
 
 
 cv34_name = "Italic k without center circle"
-cv34_italic = ast.cv(34, cv34_name, cv34_subst())
+cv34_feat_italic = ast.cv(34, cv34_name, cv34_subst())

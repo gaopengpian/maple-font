@@ -63,4 +63,4 @@ def cv35_subst():
 
 
 cv35_name = "Italic l without center tail"
-cv35_italic = ast.cv(35, cv35_name, cv35_subst())
+cv35_feat_italic = ast.cv(35, cv35_name, cv35_subst())

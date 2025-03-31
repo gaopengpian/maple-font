@@ -1,7 +1,7 @@
 from source.py.feature import ast
 
 
-def get_italic_lookup():
+def get_lookup():
     return [
         ast.subst_list_liga("Cl", ignores=[ast.ignore(None, "C", ["l", "l"])]),
         ast.subst_list_liga("al", ignores=[ast.ignore(None, "a", ["l", "l"])]),

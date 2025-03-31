@@ -7,7 +7,7 @@ class Line:
         self.level = level
 
     def indent(self) -> "Line":
-        return Line(self.text, self.level + 1)
+        return Line(self.text, self.level + 1 if self.text else 0)
 
 
 class Clazz:
@@ -135,7 +135,7 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
         else:
             target.append(c.indent())
 
-    return [Line(f"feature {tag} {{"), *target, Line(f"}} {tag};")]
+    return [Line(""), Line(f"feature {tag} {{"), *target, Line(""), Line(f"}} {tag};")]
 
 
 def cv(id: int, name: str, content: list[Line]) -> list[Line]:
@@ -145,6 +145,7 @@ def cv(id: int, name: str, content: list[Line]) -> list[Line]:
         )
 
     param = [
+        Line(""),
         Line("cvParameters {"),
         Line("FeatUILabelNameID {", 1),
         Line(f'name "{name}";', 2),
@@ -159,6 +160,7 @@ def ss(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
         raise TypeError(f"id should > 0 and < 21 in Stylistic Sets, current is {id}")
 
     param = [
+        Line(""),
         Line("featureNames {"),
         Line(f'name "{name}";', 1),
         Line("};"),
@@ -179,7 +181,7 @@ def script(script: str) -> Line:
 
 
 def lookup(name: str, desc: str | None, content: list[Line]) -> list[Line]:
-    arr = []
+    arr = [Line("")]
 
     if desc:
         arr.append(Line(f"# {desc}"))
@@ -312,7 +314,7 @@ def subst_list_liga(
 
     return lookup(
         lookup_name,
-        f"Ligature set for {source if isinstance(source, str) else lookup_name}",
+        f"Ligature rules for {source if isinstance(source, str) else lookup_name}",
         ignores + subst_rules[::],
     )
 

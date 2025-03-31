@@ -20,4 +20,4 @@ ss03_subst = [
 ]
 
 ss03_name = "Enable arbitrary tag ligatures"
-ss03 = ast.ss(3, ss03_name, ss03_subst)
+ss03_feat = ast.ss(3, ss03_name, ss03_subst)
