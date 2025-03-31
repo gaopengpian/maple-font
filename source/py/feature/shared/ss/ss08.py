@@ -43,8 +43,8 @@ ss08_subst = [
         ],
     ),
     # --------------------------------------------------------------------
-    ast.subst("-", ast.SPC, ast.gly(">>"), ast.SPC),
     ast.subst(None, ast.SPC, [ast.SPC, ast.gly(">>")], ast.gly("->>", ".ss08", True)),
+    ast.subst("-", ast.SPC, ast.gly(">>"), ast.SPC),
     ast.subst_list_liga(
         "->>",
         target=ast.gly("->>", ".ss08", True),
@@ -54,8 +54,8 @@ ss08_subst = [
         ],
     ),
     # --------------------------------------------------------------------
-    ast.subst("=", ast.SPC, ast.gly(">>"), ast.SPC),
     ast.subst(None, ast.SPC, [ast.SPC, ast.gly(">>")], ast.gly("=>>", ".ss08", True)),
+    ast.subst("=", ast.SPC, ast.gly(">>"), ast.SPC),
     ast.subst_list_liga(
         "=>>",
         target=ast.gly("=>>", ".ss08", True),
@@ -66,8 +66,8 @@ ss08_subst = [
         ],
     ),
     # --------------------------------------------------------------------
-    ast.subst(None, "-", [ast.SPC, ast.gly("<<")], ast.gly("-<<", ".ss08", True)),
     ast.subst("-", ast.SPC, ast.gly("<<"), ast.gly("-<<", ".ss08", True)),
+    ast.subst(None, "-", [ast.SPC, ast.gly("<<")], ast.SPC),
     ast.subst_list_liga(
         "-<<",
         target=ast.gly("-<<", ".ss08", True),
@@ -78,7 +78,7 @@ ss08_subst = [
     ),
     # --------------------------------------------------------------------
     ast.subst("=", ast.SPC, ast.gly("<<"), ast.gly("=<<", ".ss08", True)),
-    ast.subst(None, "=", [ast.SPC, ast.gly("<<")], ast.gly("=<<", ".ss08", True)),
+    ast.subst(None, "=", [ast.SPC, ast.gly("<<")], ast.SPC),
     ast.subst_list_liga(
         "=<<",
         target=ast.gly("=<<", ".ss08", True),
