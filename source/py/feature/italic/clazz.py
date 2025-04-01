@@ -32,13 +32,13 @@ hex_letter = ast.Clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_
 a_l = ast.Clazz(
     "AL",
     [
-        "a_l.liga",
-        "a_l.liga.cv31",
-        "a_l.liga.cv35",
-        "a_l.liga.cv31.cv35",
-        "a_l.liga.cv04",
-        "a_l.liga.cv04.cv31",
-        "a_l.liga.ss06",
+        ast.gly("al"),
+        ast.gly("al", ".cv31"),
+        ast.gly("al", ".cv35"),
+        ast.gly("al", ".cv31.cv35"),
+        ast.gly("al", ".cv04"),
+        ast.gly("al", ".cv04.cv31"),
+        ast.gly("al", ".ss06"),
     ],
 )
 

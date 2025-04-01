@@ -2,10 +2,12 @@ from source.py.feature import ast
 
 
 def upper_tag(text: str):
+    source = ["["] + [g.upper() for g in list(text)] + ["]"]
     return ast.subst_list_liga(
-        ["["] + [g.upper() for g in list(text)] + ["]"],
+        source,
         target=f"badge_{text}.liga",
         lookup_name=f"badge_{text}",
+        desc="".join(source)
     )
 
 
@@ -14,6 +16,7 @@ def any_tag(text: str):
         [f"@{g.upper()}" for g in list(text)] + [")", ")"],
         target=f"badge_{text}.liga",
         lookup_name=f"badge_{text}_alt",
+        desc=f"{text}))"
     )
 
 

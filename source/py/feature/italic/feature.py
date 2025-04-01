@@ -22,8 +22,8 @@ calt = ast.feature(
 feature_list = [
     *basic_features,
     *calt,
-    *cv01.cv01_feat_regular,
-    *cv04.cv04_feat_regular,
+    *cv01.cv01_feat_italic,
+    *cv04.cv04_feat_italic,
     *cv31.cv31_feat_italic,
     *cv32.cv32_feat_italic,
     *cv33.cv33_feat_italic,

@@ -21,6 +21,7 @@ from source.py.feature.shared.calt import (
 
 def get_calt_regular(letter: list[ast.Clazz], hex: ast.Clazz):
     return [
+        *upper.get_lookup(),
         *asciitilde.get_lookup(),
         *brace.get_lookup(),
         *colon.get_lookup(),
@@ -34,7 +35,6 @@ def get_calt_regular(letter: list[ast.Clazz], hex: ast.Clazz):
         *multiple_compare.get_lookup(letter),
         *numbersign_underscore.get_lookup(),
         *tag.get_lookup(),
-        *upper.get_lookup(),
         *whitespace.get_lookup(),
     ]
 

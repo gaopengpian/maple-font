@@ -1,13 +1,15 @@
 from source.py.feature import ast
 
 
-ss02_subst = ast.subst_list_map(
-    [
-        "<=",
-        ">=",
-    ],
-    target_suffix=".ss02",
-)
+def ss02_subst():
+    return ast.subst_list_map(
+        [
+            "<=",
+            ">=",
+        ],
+        target_suffix=".ss02",
+    )
+
 
 ss02_name = "Broken compare and equal ligatures"
-ss02_feat = ast.ss(2, ss02_name, ss02_subst)
+ss02_feat = ast.ss(2, ss02_name, ss02_subst())

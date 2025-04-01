@@ -5,21 +5,21 @@ def get_lookup():
     return [
         ast.subst_list_liga(
             "[|",
-            ignores=[
+            header=[
                 ast.ignore("[", "[", "|"),
                 ast.ignore(None, "[", ["|", "]"]),
             ],
         ),
         ast.subst_list_liga(
             "|]",
-            ignores=[
+            header=[
                 ast.ignore("[", "|", "]"),
                 ast.ignore(None, "|", ["]", "]"]),
             ],
         ),
         ast.subst_list_liga(
             "!!",
-            ignores=[
+            header=[
                 ast.ignore("!", "!", "!"),
                 ast.ignore(None, "!", ["!", "!"]),
                 ast.ignore(["(", "?"], "!", "!"),
@@ -28,91 +28,91 @@ def get_lookup():
         ),
         ast.subst_list_liga(
             "||",
-            ignores=[
+            header=[
                 ast.ignore(ast.clazz(["|", "["]), "|", "|"),
                 ast.ignore(None, "|", ["|", ast.clazz(["|", "]"])]),
             ],
         ),
         ast.subst_list_liga(
             "??",
-            ignores=[
+            header=[
                 ast.ignore("?", "?", "?"),
                 ast.ignore(None, "?", ["?", "?"]),
             ],
         ),
         ast.subst_list_liga(
             "???",
-            ignores=[
+            header=[
                 ast.ignore("?", "?", ["?", "?"]),
                 ast.ignore(None, "?", ["?", "?", "?"]),
             ],
         ),
         ast.subst_list_liga(
             "&&",
-            ignores=[
+            header=[
                 ast.ignore("&", "&", "&"),
                 ast.ignore(None, "&", ["&", "&"]),
             ],
         ),
         ast.subst_list_liga(
             "&&&",
-            ignores=[
+            header=[
                 ast.ignore("&", "&", ["&", "&"]),
                 ast.ignore(None, "&", ["&", "&", "&"]),
             ],
         ),
         ast.subst_list_liga(
             "//",
-            ignores=[
+            header=[
                 ast.ignore("/", "/", "/"),
                 ast.ignore(None, "/", ["/", ast.clazz(["/", "="])]),
             ],
         ),
         ast.subst_list_liga(
             "///",
-            ignores=[
+            header=[
                 ast.ignore("/", "/", ["/", "/"]),
                 ast.ignore(None, "/", ["/", "/", "/"]),
             ],
         ),
         ast.subst_list_liga(
             "/*",
-            ignores=[
+            header=[
                 ast.ignore(ast.clazz(["/", "*"]), "/", "*"),
                 ast.ignore(None, "/", ["*", ast.clazz(["/", "*", "."])]),
             ],
         ),
         ast.subst_list_liga(
             "/**",
-            ignores=[
+            header=[
                 ast.ignore(ast.clazz(["/", "*"]), "/", ["*", "*"]),
                 ast.ignore(None, "/", ["*", "*", ast.clazz(["/", "*", "."])]),
             ],
         ),
         ast.subst_list_liga(
             "*/",
-            ignores=[
+            header=[
                 ast.ignore(ast.clazz(["/", "*", "."]), "*", "/"),
                 ast.ignore(None, "*", ["/", ast.clazz(["/", "*"])]),
             ],
         ),
         ast.subst_list_liga(
             "++",
-            ignores=[
+            header=[
                 ast.ignore(ast.clazz(["+", ":"]), "+", "+"),
                 ast.ignore(None, "+", ["+", ast.clazz(["+", ":"])]),
             ],
         ),
         ast.subst_list_liga(
             "+++",
-            ignores=[
+            header=[
                 ast.ignore("+", "+", ["+", "+"]),
                 ast.ignore(None, "+", ["+", "+", "+"]),
             ],
         ),
         ast.subst_list_liga(
             "--",
-            ignores=[
+            header=[
                 ast.ignore("<", "-", ["-", ">"]),
                 ast.ignore(
                     ["(", "?", "<", "!"],
@@ -129,7 +129,7 @@ def get_lookup():
         ),
         ast.subst_list_liga(
             "---",
-            ignores=[
+            header=[
                 ast.ignore("<", "-", ["-", "-", ">"]),
                 ast.ignore("-", "-", ["-", "-"]),
                 ast.ignore(None, "-", ["-", "-", "-"]),
@@ -137,63 +137,63 @@ def get_lookup():
         ),
         ast.subst_list_liga(
             ";;",
-            ignores=[
+            header=[
                 ast.ignore(";", ";", ";"),
                 ast.ignore(None, ":", [":", ":"]),
             ],
         ),
         ast.subst_list_liga(
             ";;;",
-            ignores=[
+            header=[
                 ast.ignore(";", ";", [";", ";"]),
                 ast.ignore(None, ";", [";", ";", ";"]),
             ],
         ),
         ast.subst_list_liga(
             "..",
-            ignores=[
+            header=[
                 ast.ignore(".", ".", "."),
                 ast.ignore(None, ".", [".", ast.clazz([".", "<", "?"])]),
             ],
         ),
         ast.subst_list_liga(
             "...",
-            ignores=[
+            header=[
                 ast.ignore(".", ".", [".", "."]),
                 ast.ignore(None, ".", [".", ".", ast.clazz([".", "<", "?"])]),
             ],
         ),
         ast.subst_list_liga(
             ".?",  # Zig
-            ignores=[
+            header=[
                 ast.ignore(".", ".", "?"),
                 ast.ignore(None, ".", ["?", "?"]),
             ],
         ),
         ast.subst_list_liga(
             "?:",
-            ignores=[
+            header=[
                 ast.ignore("?", "?", ":"),
                 ast.ignore(None, "?", [":", ast.clazz([".", "="])]),
             ],
         ),
         ast.subst_list_liga(
             "?.",  # TypeScript / Rust
-            ignores=[
+            header=[
                 ast.ignore("?", "?", "."),
                 ast.ignore(None, "?", [".", "."]),
             ],
         ),
         ast.subst_list_liga(
             "..<",  # Swift
-            ignores=[
+            header=[
                 ast.ignore(".", ".", [".", "<"]),
                 ast.ignore(None, ".", [".", "<", ast.clazz(["<", "/", ">"])]),
             ],
         ),
         ast.subst_list_liga(
             ".=",  # Swift
-            ignores=[
+            header=[
                 ast.ignore(".", ".", "="),
                 ast.ignore(None, ".", ["=", "="]),
             ],

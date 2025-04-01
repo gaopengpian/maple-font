@@ -77,8 +77,8 @@ marks = [
     "circumflexcomb_tildecomb",
 ]
 
-marks_comb = ast.Clazz("MarksComb", marks)
-marks_comb_case = ast.Clazz("MarksCombCase", [f"{m}.case" for m in marks])
+marks_comb = ast.Clazz("Markscomb", marks)
+marks_comb_case = ast.Clazz("MarkscombCase", [f"{m}.case" for m in marks])
 
 
 def comb(config: list[list[str]]) -> list[ast.Line]:
@@ -139,7 +139,7 @@ ccmp_other = ast.lookup(
         ast.subst(marks_comb, marks_comb, None, marks_comb_case),
         ast.subst(uppercase, marks_comb, None, marks_comb_case),
         ast.subst(None, marks_comb, marks_comb_case, marks_comb_case),
-        ast.subst(marks_comb, marks_comb_case, None, marks_comb_case),
+        ast.subst(marks_comb_case, marks_comb, None, marks_comb_case),
     ],
 )
 

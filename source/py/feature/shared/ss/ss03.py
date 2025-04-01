@@ -4,20 +4,25 @@ from source.py.feature import ast
 def liga_cls(text: str):
     arr = ["["] + [f"@{g.upper()}" for g in list(text)] + ["]"]
     return ast.subst_list_liga(
-        arr, target=f"badge_{text}.liga", lookup_name=f"badge_{text}.liga.ss03"
+        arr,
+        target=f"badge_{text}.liga",
+        lookup_name=f"badge_{text}.ss03",
+        desc=f"[{text}]",
     )
 
 
-ss03_subst = [
-    liga_cls("trace"),
-    liga_cls("debug"),
-    liga_cls("info"),
-    liga_cls("warn"),
-    liga_cls("error"),
-    liga_cls("fatal"),
-    liga_cls("todo"),
-    liga_cls("fixme"),
-]
+def ss03_subst():
+    return [
+        liga_cls("trace"),
+        liga_cls("debug"),
+        liga_cls("info"),
+        liga_cls("warn"),
+        liga_cls("error"),
+        liga_cls("fatal"),
+        liga_cls("todo"),
+        liga_cls("fixme"),
+    ]
+
 
 ss03_name = "Enable arbitrary tag ligatures"
-ss03_feat = ast.ss(3, ss03_name, ss03_subst)
+ss03_feat = ast.ss(3, ss03_name, ss03_subst())

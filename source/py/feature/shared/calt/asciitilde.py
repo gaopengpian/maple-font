@@ -5,63 +5,63 @@ def get_lookup():
     return [
         ast.subst_list_liga(
             "<~",
-            ignores=[
+            header=[
                 ast.ignore("<", "<", "~"),
                 ast.ignore(None, "<", ["~", ast.clazz(["~", ">"])]),
             ],
         ),
         ast.subst_list_liga(
             "~>",
-            ignores=[
+            header=[
                 ast.ignore("~", "~", ">"),
                 ast.ignore(None, "~", ["~", ">"]),
             ],
         ),
         ast.subst_list_liga(
             "~~",
-            ignores=[
+            header=[
                 ast.ignore(ast.clazz(["~", "<"]), "~", "~"),
                 ast.ignore(None, "~", ["~", ast.clazz(["~", ">"])]),
             ],
         ),
         ast.subst_list_liga(
             "<~>",
-            ignores=[
+            header=[
                 ast.ignore("<", "<", ["~", ">"]),
                 ast.ignore(None, "<", ["~", ">", ">"]),
             ],
         ),
         ast.subst_list_liga(
             "<~~",
-            ignores=[
+            header=[
                 ast.ignore("<", "<", ["~", "~"]),
                 ast.ignore(None, "<", ["~", "~", ast.clazz(["~", ">"])]),
             ],
         ),
         ast.subst_list_liga(
             "~~>",
-            ignores=[
+            header=[
                 ast.ignore(ast.clazz(["~", ">"]), "~", ["~", ">"]),
                 ast.ignore(None, "~", ["~", ">", ">"]),
             ],
         ),
         ast.subst_list_liga(
             "-~",
-            ignores=[
+            header=[
                 ast.ignore("-", "-", "~"),
                 ast.ignore(None, "-", ["~", "~"]),
             ],
         ),
         ast.subst_list_liga(
             "~-",
-            ignores=[
+            header=[
                 ast.ignore("~", "~", "-"),
                 ast.ignore(None, "~", ["-", "-"]),
             ],
         ),
         ast.subst_list_liga(
             "~@",
-            ignores=[
+            header=[
                 ast.ignore("~", "~", "@"),
                 ast.ignore(None, "~", ["@", "@"]),
             ],

@@ -3,107 +3,107 @@ from source.py.feature import ast
 
 ss08_subst = [
     # --------------------------------------------------------------------
-    ast.subst(ast.SPC, ast.gly("<<"), "-", ast.SPC),
     ast.subst_list_liga(
         "<<-",
         target=ast.gly("<<-", ".ss08", True),
-        ignores=[
+        header=[
             ast.ignore("<", "<", ["<", "-"]),
             ast.ignore(None, "<", ["<", "-", "-"]),
+            ast.subst(ast.SPC, ast.gly("<<"), "-", ast.SPC),
         ],
     ),
     # --------------------------------------------------------------------
-    ast.subst(ast.SPC, ast.gly("<<"), "=", ast.SPC),
-    ast.subst_list_liga(
-        "<<=",
-        target=ast.gly("<<=", ".ss08", True),
-        ignores=[
-            ast.ignore("<", "<", ["<", "="]),
-            ast.ignore(None, "<", ["<", "=", "="]),
-        ],
-    ),
-    # --------------------------------------------------------------------
-    ast.subst(ast.SPC, ast.gly(">>"), "-", ast.SPC),
     ast.subst_list_liga(
         ">>-",
         target=ast.gly(">>-", ".ss08", True),
-        ignores=[
+        header=[
             ast.ignore(">", ">", [">", "-"]),
             ast.ignore(None, ">", [">", "-", "-"]),
+            ast.subst(ast.SPC, ast.gly(">>"), "-", ast.SPC),
         ],
     ),
     # --------------------------------------------------------------------
-    ast.subst(ast.SPC, ast.gly(">>"), "=", ast.SPC),
+    ast.subst_list_liga(
+        "<<=",
+        target=ast.gly("<<=", ".ss08", True),
+        header=[
+            ast.ignore("<", "<", ["<", "="]),
+            ast.ignore(None, "<", ["<", "=", "="]),
+            ast.subst(ast.SPC, ast.gly("<<"), "=", ast.SPC),
+        ],
+    ),
+    # --------------------------------------------------------------------
     ast.subst_list_liga(
         ">>=",
         target=ast.gly(">>=", ".ss08", True),
-        ignores=[
+        header=[
             ast.ignore(">", ">", [">", "="]),
             ast.ignore(None, ">", [">", "=", "="]),
+            ast.subst(ast.SPC, ast.gly(">>"), "=", ast.SPC),
         ],
     ),
     # --------------------------------------------------------------------
-    ast.subst([ast.SPC, ast.SPC], ast.gly(">>"), None, ast.gly("->>", ".ss08", True)),
-    ast.subst(None, "-", [ast.SPC, ast.gly(">>")], ast.SPC),
-    ast.subst_list_liga(
-        "->>",
-        target=ast.gly("->>", ".ss08", True),
-        ignores=[
-            ast.ignore("-", "-", [">", ">"]),
-            ast.ignore(None, "-", [">", ">", ">"]),
-        ],
-    ),
-    # --------------------------------------------------------------------
-    ast.subst([ast.SPC, ast.SPC], ast.gly(">>"), None, ast.gly("=>>", ".ss08", True)),
-    ast.subst(None, "=", [ast.SPC, ast.gly(">>")], ast.SPC),
-    ast.subst_list_liga(
-        "=>>",
-        target=ast.gly("=>>", ".ss08", True),
-        ignores=[
-            ast.ignore("=", "=", [">", ">"]),
-            ast.ignore(["(", "?"], "=", [">", ">"]),
-            ast.ignore(None, "=", [">", ">", ">"]),
-        ],
-    ),
-    # --------------------------------------------------------------------
-    ast.subst([ast.SPC, ast.SPC], ast.gly("<<"), None, ast.gly("-<<", ".ss08", True)),
-    ast.subst(None, "-", [ast.SPC, ast.gly("<<")], ast.SPC),
     ast.subst_list_liga(
         "-<<",
         target=ast.gly("-<<", ".ss08", True),
-        ignores=[
+        header=[
             ast.ignore("-", "-", ["<", "<"]),
             ast.ignore(None, "-", ["<", "<", "<"]),
+            ast.subst([ast.SPC, ast.SPC], ast.gly("<<"), None, ast.gly("-<<", ".ss08", True)),
+            ast.subst(None, "-", [ast.SPC, ast.gly("<<")], ast.SPC),
         ],
     ),
     # --------------------------------------------------------------------
-    ast.subst([ast.SPC, ast.SPC], ast.gly("<<"), None, ast.gly("=<<", ".ss08", True)),
-    ast.subst(None, "=", [ast.SPC, ast.gly("<<")], ast.SPC),
+    ast.subst_list_liga(
+        "->>",
+        target=ast.gly("->>", ".ss08", True),
+        header=[
+            ast.ignore("-", "-", [">", ">"]),
+            ast.ignore(None, "-", [">", ">", ">"]),
+            ast.subst([ast.SPC, ast.SPC], ast.gly(">>"), None, ast.gly("->>", ".ss08", True)),
+            ast.subst(None, "-", [ast.SPC, ast.gly(">>")], ast.SPC),
+        ],
+    ),
+    # --------------------------------------------------------------------
     ast.subst_list_liga(
         "=<<",
         target=ast.gly("=<<", ".ss08", True),
-        ignores=[
+        header=[
             ast.ignore("=", "=", ["<", "<"]),
             ast.ignore(["(", "?"], "=", ["<", "<"]),
             ast.ignore(None, "=", ["<", "<", "<"]),
+            ast.subst([ast.SPC, ast.SPC], ast.gly("<<"), None, ast.gly("=<<", ".ss08", True)),
+            ast.subst(None, "=", [ast.SPC, ast.gly("<<")], ast.SPC),
         ],
     ),
     # --------------------------------------------------------------------
     ast.subst_list_liga(
-        ">-",
-        target=ast.gly(">-", ".ss08", True),
-        ignores=[
-            ast.ignore(">", ">", "-"),
-            ast.ignore(None, ">", ["-", ast.clazz(["-", ">", "<"])]),
+        "=>>",
+        target=ast.gly("=>>", ".ss08", True),
+        header=[
+            ast.ignore("=", "=", [">", ">"]),
+            ast.ignore(["(", "?"], "=", [">", ">"]),
+            ast.ignore(None, "=", [">", ">", ">"]),
+            ast.subst([ast.SPC, ast.SPC], ast.gly(">>"), None, ast.gly("=>>", ".ss08", True)),
+            ast.subst(None, "=", [ast.SPC, ast.gly(">>")], ast.SPC),
         ],
     ),
     # --------------------------------------------------------------------
     ast.subst_list_liga(
         "-<",
         target=ast.gly("-<", ".ss08", True),
-        ignores=[
+        header=[
             ast.ignore(ast.clazz([">", "<", "-"]), "-", "<"),
             ast.ignore(None, "-", ["<", ast.clazz(["<", "/", "?"])]),
+        ],
+    ),
+    # --------------------------------------------------------------------
+    ast.subst_list_liga(
+        ">-",
+        target=ast.gly(">-", ".ss08", True),
+        header=[
+            ast.ignore(">", ">", "-"),
+            ast.ignore(None, ">", ["-", ast.clazz(["-", ">", "<"])]),
         ],
     ),
     # --------------------------------------------------------------------

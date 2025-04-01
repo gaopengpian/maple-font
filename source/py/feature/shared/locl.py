@@ -1,7 +1,7 @@
 import source.py.feature.ast as ast
 
 
-i_acc = ast.subst(None, "i", None, "idotaccent")
+i_acc = ast.__subst("i", "idotaccent")
 locl_0 = ast.lookup(
     "locl_latin_0",
     None,
@@ -55,8 +55,8 @@ locl_3 = ast.lookup(
     [
         ast.script("latn"),
         ast.lang("NLD"),
-        ast.subst("ij", "acutecomb", None, "ij_acute"),
-        ast.subst("IJ", "acutecomb", None, "IJ_acute"),
+        ast.__subst("ij acutecomb", "ij_acute"),
+        ast.__subst("IJ acutecomb", "IJ_acute"),
     ],
 )
 

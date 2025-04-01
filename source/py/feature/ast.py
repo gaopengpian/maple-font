@@ -264,8 +264,12 @@ def subst(
         Line("sub a b' hyphen by d;")
     ]
     """
+    marker = "'"
+    if not prefix and not suffix:
+        marker = ""
     return __subst(
-        f"{__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)}", f"{__gly(replace)}"
+        f"{__prefix(prefix)}{__gly(glyph)}{marker}{__suffix(suffix)}",
+        f"{__gly(replace)}",
     )
 
 
@@ -296,8 +300,9 @@ def subst_list_liga(
     source: str | list[str],
     target: str | None = None,
     lookup_name: str | None = None,
+    desc: str | None = None,
     surround: list[list[Sequence[str | Clazz]]] = [],
-    ignores: list[Line] | None = None,
+    header: list[Line] | None = None,
 ):
     """
     Generate substitution lines for target ligature.
@@ -308,20 +313,23 @@ def subst_list_liga(
 
     Args:
         source: The glyphs to form the ligature (e.g., "!=" or ["!", "="]).
-        target: The ligature glyph name; defaults to gly(source).
-        lookup_name: Name of the lookup block; defaults to target.
+        target: The ligature glyph name; defaults to ``gly(source)``.
+        lookup_name: Name of the lookup block; defaults to ``target``.
+        desc: Content of comment before the lookup block; defaults to ``source``,
+            or ``lookup_name`` if ``source`` is ``list``.
         surround: List of [prefix, suffix] pairs specifying contexts for substitution.
             Each prefix/suffix is ``Sequence[str | Clazz]``.
             If empty, generates basic substitution rules without context.
-        ignores: List of ignore rules to include in the lookup.
+        header: List of substitution rules before the main rules in lookup block.
 
     Returns:
         list[Line]: Lines forming a lookup block with substitution rules.
 
     Examples:
-        >>> subst_list_liga("!=")
+        >>> subst_list_liga("!=", header=[ignore("a", "b", "c")])
         [
             Line("lookup exclam_equal.liga {"),
+            Line("ignore sub a b' c;"),
             Line("sub exclam' equal by SPC;"),
             Line("sub SPC equal' by exclam_equal.liga;"),
             Line("} lookup exclam_equal.liga;")
@@ -341,8 +349,10 @@ def subst_list_liga(
         target = gly(source)
     if not lookup_name:
         lookup_name = target
-    if ignores is None:
-        ignores = []
+    if not desc:
+        desc = "Ligature rules for " + source if isinstance(source, str) else lookup_name
+    if header is None:
+        header = []
 
     def to_list(item):
         if item is None:
@@ -371,8 +381,8 @@ def subst_list_liga(
 
     return lookup(
         lookup_name,
-        f"Ligature rules for {source if isinstance(source, str) else lookup_name}",
-        ignores + subst_rules,
+        desc,
+        header + subst_rules,
     )
 
 
