@@ -27,14 +27,14 @@ def get_lookup(letter_list: list[ast.Clazz]):
     return [
         ast.subst_list_liga(
             "<<",
-            header=[
+            banner=[
                 ast.ignore("<", "<", "<"),
                 ast.ignore(None, "<", ["<", ast.clazz(["<", "~"])]),
             ],
         ),
         ast.subst_list_liga(
             "<<<",
-            header=[
+            banner=[
                 ast.ignore("<", "<", ["<", "<"]),
                 ast.ignore(None, "<", ["<", "<", "<"]),
             ],
@@ -47,7 +47,7 @@ def get_lookup(letter_list: list[ast.Clazz]):
         eh.state(),
         ast.subst_list_liga(
             ">>",
-            header=[
+            banner=[
                 ast.ignore(None, ">", [">", ">"]),
                 ast.ignore(ast.clazz(["<", "/", ">"]), ">", [">"]),
             ],
@@ -55,7 +55,7 @@ def get_lookup(letter_list: list[ast.Clazz]):
         ),
         ast.subst_list_liga(
             ">>>",
-            header=[
+            banner=[
                 ast.ignore(">", ">", [">", ">"]),
             ],
             surround=surround,

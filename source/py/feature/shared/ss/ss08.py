@@ -6,7 +6,7 @@ ss08_subst = [
     ast.subst_list_liga(
         "<<-",
         target=ast.gly("<<-", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore("<", "<", ["<", "-"]),
             ast.ignore(None, "<", ["<", "-", "-"]),
             ast.subst(ast.SPC, ast.gly("<<"), "-", ast.SPC),
@@ -16,7 +16,7 @@ ss08_subst = [
     ast.subst_list_liga(
         ">>-",
         target=ast.gly(">>-", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore(">", ">", [">", "-"]),
             ast.ignore(None, ">", [">", "-", "-"]),
             ast.subst(ast.SPC, ast.gly(">>"), "-", ast.SPC),
@@ -26,7 +26,7 @@ ss08_subst = [
     ast.subst_list_liga(
         "<<=",
         target=ast.gly("<<=", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore("<", "<", ["<", "="]),
             ast.ignore(None, "<", ["<", "=", "="]),
             ast.subst(ast.SPC, ast.gly("<<"), "=", ast.SPC),
@@ -36,7 +36,7 @@ ss08_subst = [
     ast.subst_list_liga(
         ">>=",
         target=ast.gly(">>=", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore(">", ">", [">", "="]),
             ast.ignore(None, ">", [">", "=", "="]),
             ast.subst(ast.SPC, ast.gly(">>"), "=", ast.SPC),
@@ -46,7 +46,7 @@ ss08_subst = [
     ast.subst_list_liga(
         "-<<",
         target=ast.gly("-<<", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore("-", "-", ["<", "<"]),
             ast.ignore(None, "-", ["<", "<", "<"]),
             ast.subst([ast.SPC, ast.SPC], ast.gly("<<"), None, ast.gly("-<<", ".ss08", True)),
@@ -57,7 +57,7 @@ ss08_subst = [
     ast.subst_list_liga(
         "->>",
         target=ast.gly("->>", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore("-", "-", [">", ">"]),
             ast.ignore(None, "-", [">", ">", ">"]),
             ast.subst([ast.SPC, ast.SPC], ast.gly(">>"), None, ast.gly("->>", ".ss08", True)),
@@ -68,7 +68,7 @@ ss08_subst = [
     ast.subst_list_liga(
         "=<<",
         target=ast.gly("=<<", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore("=", "=", ["<", "<"]),
             ast.ignore(["(", "?"], "=", ["<", "<"]),
             ast.ignore(None, "=", ["<", "<", "<"]),
@@ -80,7 +80,7 @@ ss08_subst = [
     ast.subst_list_liga(
         "=>>",
         target=ast.gly("=>>", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore("=", "=", [">", ">"]),
             ast.ignore(["(", "?"], "=", [">", ">"]),
             ast.ignore(None, "=", [">", ">", ">"]),
@@ -92,7 +92,7 @@ ss08_subst = [
     ast.subst_list_liga(
         "-<",
         target=ast.gly("-<", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore(ast.clazz([">", "<", "-"]), "-", "<"),
             ast.ignore(None, "-", ["<", ast.clazz(["<", "/", "?"])]),
         ],
@@ -101,7 +101,7 @@ ss08_subst = [
     ast.subst_list_liga(
         ">-",
         target=ast.gly(">-", ".ss08", True),
-        header=[
+        banner=[
             ast.ignore(">", ">", "-"),
             ast.ignore(None, ">", ["-", ast.clazz(["-", ">", "<"])]),
         ],

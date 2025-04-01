@@ -302,7 +302,7 @@ def subst_list_liga(
     lookup_name: str | None = None,
     desc: str | None = None,
     surround: list[list[Sequence[str | Clazz]]] = [],
-    header: list[Line] | None = None,
+    banner: list[Line] | None = None,
 ):
     """
     Generate substitution lines for target ligature.
@@ -320,13 +320,13 @@ def subst_list_liga(
         surround: List of [prefix, suffix] pairs specifying contexts for substitution.
             Each prefix/suffix is ``Sequence[str | Clazz]``.
             If empty, generates basic substitution rules without context.
-        header: List of substitution rules before the main rules in lookup block.
+        banner: List of substitution rules before the main rules in lookup block.
 
     Returns:
         list[Line]: Lines forming a lookup block with substitution rules.
 
     Examples:
-        >>> subst_list_liga("!=", header=[ignore("a", "b", "c")])
+        >>> subst_list_liga("!=", banner=[ignore("a", "b", "c")])
         [
             Line("lookup exclam_equal.liga {"),
             Line("ignore sub a b' c;"),
@@ -351,8 +351,8 @@ def subst_list_liga(
         lookup_name = target
     if not desc:
         desc = "Ligature rules for " + source if isinstance(source, str) else lookup_name
-    if header is None:
-        header = []
+    if banner is None:
+        banner = []
 
     def to_list(item):
         if item is None:
@@ -382,7 +382,7 @@ def subst_list_liga(
     return lookup(
         lookup_name,
         desc,
-        header + subst_rules,
+        banner + subst_rules,
     )
 
 

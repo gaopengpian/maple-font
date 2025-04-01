@@ -5,7 +5,7 @@ ss07_subst = [
     ast.subst_list_liga(
         ">>",
         lookup_name=f"relax_{ast.gly('>>')}",
-        header=[
+        banner=[
             ast.ignore(ast.clazz([">", "/", "<"]), ">", ">"),
             ast.ignore(None, ">", [">", ">"]),
         ],
@@ -13,7 +13,7 @@ ss07_subst = [
     ast.subst_list_liga(
         ">>>",
         lookup_name=f"relax_{ast.gly('>>>')}",
-        header=[
+        banner=[
             ast.ignore(">", ">", [">", ">"]),
             ast.ignore(None, ">", [">", ">", ">"]),
         ],

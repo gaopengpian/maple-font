@@ -6,7 +6,7 @@ def get_lookup():
     return [
         ast.subst_list_liga(
             "<!--",
-            header=[
+            banner=[
                 ast.ignore("<", "<", ["!", "-", "-"]),
                 ast.ignore(["(", "?"], "<", ["!", "-", "-"]),
                 ast.ignore(None, "<", ["!", "-", "-", "-"]),
@@ -14,7 +14,7 @@ def get_lookup():
         ),
         ast.subst_list_liga(
             "<#--",
-            header=[
+            banner=[
                 ast.ignore("<", "<", ["#", "-", "-"]),
                 ast.ignore(None, "<", ["#", "-", "-", "-"]),
             ],
@@ -22,21 +22,21 @@ def get_lookup():
         ast.subst_list_liga("<!---->", target="xml_empty_comment.liga"),
         ast.subst_list_liga(
             "<->",
-            header=[
+            banner=[
                 ast.ignore("<", "<", ["-", ">"]),
                 ast.ignore(None, "<", ["-", ">", ">"]),
             ],
         ),
         ast.subst_list_liga(
             "->",
-            header=[
+            banner=[
                 ast.ignore(ast.clazz(["-", "<", ">", "|", "+"]), "-", ">"),
                 ast.ignore(None, "-", [">", ">"]),
             ],
         ),
         ast.subst_list_liga(
             "<-",
-            header=[
+            banner=[
                 ast.ignore(
                     None, "<", ["-", ast.clazz(["-", "<", ">", "|", "+", "/", digit])]
                 ),
@@ -45,42 +45,42 @@ def get_lookup():
         ),
         ast.subst_list_liga(
             "-->",
-            header=[
+            banner=[
                 ast.ignore("-", "-", ["-", ">"]),
                 ast.ignore(None, "-", ["-", ">", ">"]),
             ],
         ),
         ast.subst_list_liga(
             "<--",
-            header=[
+            banner=[
                 ast.ignore("<", "<", ["-", "-"]),
                 ast.ignore(None, "<", ["-", "-", "-"]),
             ],
         ),
         ast.subst_list_liga(
             "<-<",
-            header=[
+            banner=[
                 ast.ignore("<", "<", ["-", "<"]),
                 ast.ignore(None, "<", ["-", "<", "<"]),
             ],
         ),
         ast.subst_list_liga(
             ">->",
-            header=[
+            banner=[
                 ast.ignore(">", ">", ["-", ">"]),
                 ast.ignore(None, ">", ["-", ">", ">"]),
             ],
         ),
         ast.subst_list_liga(
             "<-|",
-            header=[
+            banner=[
                 ast.ignore("<", "<", ["-", "|"]),
                 ast.ignore(None, "<", ["-", "|", "|"]),
             ],
         ),
         ast.subst_list_liga(
             "|->",
-            header=[
+            banner=[
                 ast.ignore("|", "|", ["-", ">"]),
                 ast.ignore(None, "|", ["-", ">", ">"]),
             ],

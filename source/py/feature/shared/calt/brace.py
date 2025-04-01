@@ -5,35 +5,35 @@ def get_lookup():
     return [
         ast.subst_list_liga(
             "{{",
-            header=[
+            banner=[
                 ast.ignore("{", "{", "{"),
                 ast.ignore(None, "{", ["{", ast.clazz(["{", "!", "-"])]),
             ],
         ),
         ast.subst_list_liga(
             "{|",
-            header=[
+            banner=[
                 ast.ignore("{", "{", "|"),
                 ast.ignore(None, "{", ["|", ast.clazz(["|", "}"])]),
             ],
         ),
         ast.subst_list_liga(
             "}}",
-            header=[
+            banner=[
                 ast.ignore(None, "}", ["}", "}"]),
                 ast.ignore(ast.clazz(["}", "-"]), "}", "}"),
             ],
         ),
         ast.subst_list_liga(
             "|}",
-            header=[
+            banner=[
                 ast.ignore(None, "|", ["|", "}"]),
                 ast.ignore(ast.clazz(["{", "|"]), "|", "}"),
             ],
         ),
         ast.subst_list_liga(
             "{{--",
-            header=[
+            banner=[
                 ast.ignore(
                     ["{", "{", "-"],
                     "-",
@@ -48,7 +48,7 @@ def get_lookup():
         ),
         ast.subst_list_liga(
             "--}}",
-            header=[
+            banner=[
                 ast.ignore(
                     "-",
                     "-",

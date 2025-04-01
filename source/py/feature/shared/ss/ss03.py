@@ -6,7 +6,7 @@ def liga_cls(text: str):
     return ast.subst_list_liga(
         arr,
         target=f"badge_{text}.liga",
-        lookup_name=f"badge_{text}.ss03",
+        lookup_name=f"badge_{text}.liga.ss03",
         desc=f"[{text}]",
     )
 
