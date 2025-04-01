@@ -7,7 +7,9 @@ def get_lookup():
     dbls = "germandbls"
     dbls_calt = f"{dbls}.calt"
     return [
-        ast.subst(pre, ":", pre, ast.gly(":", ".case")),
+        ast.lookup(
+            "cases", "", [ast.subst(pre, ":", pre, ast.gly(":", ".case"))]
+        ),
         ast.lookup(
             "uppercaseSharpS",
             "",

@@ -436,12 +436,11 @@ def ignore(
     return Line(f"ignore sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)};")
 
 
-def flatten(data: Sequence[Line | list[Line]]) -> list[Line]:
+def flatten(data: Sequence[Line | list[Line] | list[list[Line]]]) -> list[Line]:
     result = []
     for item in data:
         if isinstance(item, list):
-            for it in item:
-                result.append(it)
+            result += flatten(item)
         else:
             result.append(item)
     return result

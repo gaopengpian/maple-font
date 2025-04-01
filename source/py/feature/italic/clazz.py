@@ -42,8 +42,7 @@ a_l = ast.Clazz(
     ],
 )
 
-class_list = [
-    *basic_class_list,
+cls_letters_list = [
     cls_a,
     cls_b,
     cls_c,
@@ -70,6 +69,11 @@ class_list = [
     cls_x,
     cls_y,
     cls_z,
+]
+
+class_list = [
+    *basic_class_list,
+    *cls_letters_list,
     hex_letter,
     a_l,
 ]

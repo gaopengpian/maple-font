@@ -1,5 +1,5 @@
 import source.py.feature.ast as ast
-from source.py.feature.regular.clazz import hex_letter, cls_letters_list
+from source.py.feature.italic.clazz import hex_letter, cls_letters_list
 from source.py.feature.shared import basic_features
 from source.py.feature.shared.calt import get_calt_italic
 from source.py.feature.shared.cv import (
