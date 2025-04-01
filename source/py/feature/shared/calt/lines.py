@@ -28,7 +28,7 @@ def get_lookup():
             "-|",
             banner=[
                 ast.ignore(ast.clazz(["-", "<"]), "-", "|"),
-                ast.ignore("-", "-", "|"),
+                ast.ignore(None, "-", ["|", "|"]),
             ],
         ),
         ast.subst_liga(
@@ -69,7 +69,7 @@ def get_lookup():
         ast.subst_liga(
             "||-",
             banner=[
-                ast.ignore("|", "|", ["-", "-"]),
+                ast.ignore("|", "|", ["|", "-"]),
                 ast.ignore(None, "|", ["|", "-", "-"]),
             ],
         ),

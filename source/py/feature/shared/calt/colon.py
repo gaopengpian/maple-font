@@ -48,7 +48,7 @@ def get_lookup():
         ast.subst_liga(
             ":=:",
             banner=[
-                ast.ignore(ast.clazz(["=", ":", "<", ">", "?"]), "=", ["=", ":"]),
+                ast.ignore(ast.clazz(["=", ":", "<", ">", "?"]), ":", ["=", ":"]),
                 ast.ignore(None, ":", ["=", ":", ast.clazz(["=", ":", "<", ">", "?"])]),
             ],
         ),
@@ -56,8 +56,8 @@ def get_lookup():
             "=:=",
             banner=[
                 ast.ignore("=", "=", [":", "="]),
-                ast.ignore(["(", "?", "="], ":", "="),
                 ast.ignore(None, "=", [":", "=", "="]),
+                ast.ignore(["(", "?"], "=", [":", "="]),
             ],
         ),
         ast.subst_liga(

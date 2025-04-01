@@ -92,6 +92,14 @@ def get_lookup():
                 ast.subst(None, "#", [ast.SPC, ast.SPC, ast.gly("#__")], start),
             ],
         ),
+        ast.lookup(
+            ast.gly("##_("),
+            "Ligature rules for ##_(",
+            [
+                ast.ignore("#", "#", [ast.SPC, ast.SPC, ast.gly("#_(")]),
+                ast.subst(None, "#", [ast.SPC, ast.SPC, ast.gly("#_(")], start),
+            ],
+        ),
         ast.subst_liga(
             "]#",
             banner=[
