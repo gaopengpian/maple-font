@@ -86,7 +86,7 @@ def get_lookup():
         ),
         ast.lookup(
             ast.gly("##__"),
-            None,
+            "Ligature rules for ##__",
             [
                 ast.ignore("#", "#", [ast.SPC, ast.SPC, ast.gly("#__")]),
                 ast.subst(None, "#", [ast.SPC, ast.SPC, ast.gly("#__")], start),

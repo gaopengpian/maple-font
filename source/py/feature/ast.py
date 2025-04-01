@@ -144,9 +144,12 @@ def create(cls: list[Clazz], content: list[Line], indent=2) -> str:
     lines: list[Line] = []
 
     for line in clazz_states(cls, False) + content:
-        if line.text.startswith("#") or (
-            line.text.startswith("feature ") and line.text.endswith("{")
-        ):
+        if (
+            len(lines) > 0
+            and lines[-1].text
+            and not lines[-1].text.startswith("#")
+            and (line.text.startswith("#") or line.text.startswith("lookup"))
+        ) or (line.text.startswith("feature ") and line.text.endswith("{")):
             lines.append(Line(""))
         lines.append(line)
 
@@ -169,7 +172,7 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     for c in flatten(content):
         target.append(c.indent())
 
-    return [Line(f"feature {tag} {{"), *target, Line(f"}} {tag};")]
+    return [Line(f"feature {tag} {{"), Line(""), *target, Line(""), Line(f"}} {tag};")]
 
 
 def cv(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
@@ -195,7 +198,6 @@ def cv(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
         )
 
     lines = [
-        Line(""),
         Line("cvParameters {"),
         Line("FeatUILabelNameID {", 1),
         Line(f'name "{name}";', 2),
@@ -205,7 +207,7 @@ def cv(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
 
     _content = flatten(content)
 
-    if not _content[0].text.startswith("lookup"):
+    if _content[0].text:
         lines.append(Line(""))
 
     lines += _content
@@ -231,14 +233,14 @@ def ss(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     """
     if id < 1 or id > 20:
         raise TypeError(f"id should > 0 and < 21 in Stylistic Sets, current is {id}")
+
     _content = flatten(content)
     lines = [
-        Line(""),
         Line("featureNames {"),
         Line(f'name "{name}";', 1),
         Line("};"),
     ]
-    if not _content[0].text.startswith("lookup"):
+    if _content[0].text:
         lines.append(Line(""))
 
     lines += _content
