@@ -3,15 +3,13 @@ from source.py.feature.shared.clazz import digit
 
 
 def get_lookup(letter_list: list[ast.Clazz]):
-    var = ast.Clazz("Var", ["_", ast.gly("__")], [*letter_list, digit])
+    var = ast.Clazz("Var", ["_", "__", *letter_list, digit])
     space = ast.Clazz("Space", ["space", "nbspace"])
-    leading_symbol_liga = ast.Clazz(
-        "LeadingSymbolLiga", [ast.gly("++"), ast.gly("--"), ast.gly("__")]
-    )
+    leading_symbol_liga = ast.Clazz("LeadingSymbolLiga", ["++", "--", "__"])
     symbol_before_greater = ast.Clazz(
         "SymbolBeforeGreater", ["|", "!", "~", "~", "#", "%"]
     )
-    number = ast.Clazz("Number", ["+", "-"], [digit])
+    number = ast.Clazz("Number", ["+", "-", digit])
     eh = ast.Clazz("EH", ["=", "-"])
 
     surround = [
@@ -25,27 +23,31 @@ def get_lookup(letter_list: list[ast.Clazz]):
     ]
 
     return [
-        ast.subst_list_liga(
+        ast.subst_liga(
             "<<",
             banner=[
                 ast.ignore("<", "<", "<"),
                 ast.ignore(None, "<", ["<", ast.clazz(["<", "~"])]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "<<<",
             banner=[
                 ast.ignore("<", "<", ["<", "<"]),
                 ast.ignore(None, "<", ["<", "<", "<"]),
             ],
         ),
-        var.state(),
-        space.state(),
-        leading_symbol_liga.state(),
-        symbol_before_greater.state(),
-        number.state(),
-        eh.state(),
-        ast.subst_list_liga(
+        ast.clazz_states(
+            [
+                var,
+                space,
+                leading_symbol_liga,
+                symbol_before_greater,
+                number,
+                eh,
+            ]
+        ),
+        ast.subst_liga(
             ">>",
             banner=[
                 ast.ignore(None, ">", [">", ">"]),
@@ -53,7 +55,7 @@ def get_lookup(letter_list: list[ast.Clazz]):
             ],
             surround=surround,
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ">>>",
             banner=[
                 ast.ignore(">", ">", [">", ">"]),

@@ -28,7 +28,7 @@ cls_w = ast.Clazz("W", ["W", "w"])
 cls_x = ast.Clazz("X", ["X", "x", "x.cv36"])
 cls_y = ast.Clazz("Y", ["Y", "y", "y.cv37"])
 cls_z = ast.Clazz("Z", ["Z", "z"])
-hex_letter = ast.Clazz("HexLetter", [], [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
+hex_letter = ast.Clazz("HexLetter", [cls_a, cls_b, cls_c, cls_d, cls_e, cls_f])
 a_l = ast.Clazz(
     "AL",
     [

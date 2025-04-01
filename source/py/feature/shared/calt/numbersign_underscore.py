@@ -7,77 +7,77 @@ def get_lookup():
     end = "numbersign_end.liga"
 
     return [
-        ast.subst_list_liga(
+        ast.subst_liga(
             "__",
             banner=[
                 ast.ignore(ast.clazz(["_", "#"]), "_", "_"),
                 ast.ignore(None, "_", ["_", "_"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#{",
             banner=[
                 ast.ignore("#", "#", "{"),
                 ast.ignore(None, "#", ["{", "{"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#[",
             banner=[
                 ast.ignore("#", "#", "["),
                 ast.ignore(None, "#", ["[", "["]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#(",
             banner=[
                 ast.ignore("#", "#", "("),
                 ast.ignore(None, "#", ["(", "("]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#?",
             banner=[
                 ast.ignore("#", "#", "?"),
                 ast.ignore(None, "#", ["?", "?"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#!",
             banner=[
                 ast.ignore("#", "#", "!"),
                 ast.ignore(None, "#", ["!", "!"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#:",
             banner=[
                 ast.ignore("#", "#", ":"),
                 ast.ignore(None, "#", [":", ":"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#=",
             banner=[
                 ast.ignore("#", "#", "="),
                 ast.ignore(None, "#", ["=", "="]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#_",
             banner=[
                 ast.ignore("#", "#", "_"),
                 ast.ignore(None, "#", ["_", "_"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#__",
             banner=[
                 ast.ignore("#", "#", ["_", "_"]),
                 ast.ignore(None, "#", ["_", "_", "_"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "#_(",
             banner=[
                 ast.ignore("#", "#", ["_", "("]),
@@ -92,7 +92,7 @@ def get_lookup():
                 ast.subst(None, "#", [ast.SPC, ast.SPC, ast.gly("#__")], start),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "]#",
             banner=[
                 ast.ignore("]", "]", "#"),

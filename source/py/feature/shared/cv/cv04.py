@@ -17,14 +17,14 @@ cv04_base = [
 
 
 def cv04_subst():
-    return ast.subst_list_map(
+    return ast.subst_map(
         cv04_base,
         target_suffix=".cv04",
     )
 
 
 def cv04_subst_i():
-    return ast.subst_list_map(
+    return ast.subst_map(
         [
             *cv04_base,
             ast.gly("C l"),

@@ -1,16 +1,14 @@
 import source.py.feature.ast as ast
 
-lang_list = ast.langsys_list(
-    [
-        ["DFLT", "dflt"],
-        ["latn", "dflt"],
-        ["latn", "AZE"],
-        ["latn", "CRT"],
-        ["latn", "KAZ"],
-        ["latn", "TAT"],
-        ["latn", "TRK"],
-        ["latn", "ROM"],
-        ["latn", "MOL"],
-        ["latn", "CAT"],
-    ]
-)
+lang_list = [
+    ast.langsys("DFLT", "dflt"),
+    ast.langsys("latn", "dflt"),
+    ast.langsys("latn", "AZE"),
+    ast.langsys("latn", "CRT"),
+    ast.langsys("latn", "KAZ"),
+    ast.langsys("latn", "TAT"),
+    ast.langsys("latn", "TRK"),
+    ast.langsys("latn", "ROM"),
+    ast.langsys("latn", "MOL"),
+    ast.langsys("latn", "CAT"),
+]

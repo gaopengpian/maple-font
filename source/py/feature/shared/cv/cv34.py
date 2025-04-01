@@ -2,7 +2,7 @@ import source.py.feature.ast as ast
 
 
 def cv34_subst():
-    return ast.subst_list_map(["k", "kcommaaccent"], target_suffix=".cv34")
+    return ast.subst_map(["k", "kcommaaccent"], target_suffix=".cv34")
 
 
 cv34_name = "Italic k without center circle"

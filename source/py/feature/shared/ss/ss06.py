@@ -2,7 +2,7 @@ from source.py.feature import ast
 
 
 def ss06_subst():
-    return ast.subst_list_map(
+    return ast.subst_map(
         [
             ast.gly("Cl"),
             ast.gly("al"),

@@ -2,7 +2,7 @@ import source.py.feature.ast as ast
 
 
 def cv03_subst():
-    return ast.subst_list_map(
+    return ast.subst_map(
         [
             "i",
             "iacute",

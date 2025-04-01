@@ -146,10 +146,14 @@ ccmp_other = ast.lookup(
 ccmp_features = ast.feature(
     "ccmp",
     [
-        comb_top_acc.state(),
-        comb_non_top_acc.state(),
-        marks_comb.state(),
-        marks_comb_case.state(),
+        ast.clazz_states(
+            [
+                comb_top_acc,
+                comb_non_top_acc,
+                marks_comb,
+                marks_comb_case,
+            ]
+        ),
         *ccmp_other,
         *ccmp_latin,
         ast.script("latn"),

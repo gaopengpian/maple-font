@@ -16,16 +16,16 @@ clazz_number = ast.clazz(_number_list)
 clazz_numr = ast.clazz([f"{n}.numr" for n in _number_list])
 clazz_dnom = ast.clazz([f"{n}.dnom" for n in _number_list])
 
-zero = ast.subst_list_map(
+zero = ast.subst_map(
     ["zero", "zero.dnom", "zero.numr", "zeroinferior", "zerosuperior"], target_suffix=".zero"
 )
 
-sinf = ast.subst_list_map(_number_list, target_suffix="inferior")
+sinf = ast.subst_map(_number_list, target_suffix="inferior")
 # subs is same as sinf, use another instance to correct indent
-subs = ast.subst_list_map(_number_list, target_suffix="inferior")
-sups = ast.subst_list_map(_number_list, target_suffix="superior")
-numr = ast.subst_list_map(_number_list, target_suffix=".numr")
-dnom = ast.subst_list_map(_number_list, target_suffix=".dnom")
+subs = ast.subst_map(_number_list, target_suffix="inferior")
+sups = ast.subst_map(_number_list, target_suffix="superior")
+numr = ast.subst_map(_number_list, target_suffix=".numr")
+dnom = ast.subst_map(_number_list, target_suffix=".dnom")
 ordn = [
     ast.subst(clazz_number, ast.clazz(["A", "a"]), None, "ordfeminine"),
     ast.subst(clazz_number, ast.clazz(["O", "o"]), None, "ordmasculine"),

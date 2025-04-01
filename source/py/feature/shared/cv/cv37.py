@@ -2,7 +2,7 @@ import source.py.feature.ast as ast
 
 
 def cv37_subst():
-    return ast.subst_list_map(
+    return ast.subst_map(
         [
             "y",
             "yacute",

@@ -2,7 +2,7 @@ import source.py.feature.ast as ast
 
 
 def cv32_subst():
-    return ast.subst_list_map(["f", ast.gly("f_f")], target_suffix=".cv32")
+    return ast.subst_map(["f", ast.gly("f_f")], target_suffix=".cv32")
 
 
 cv32_name = "Italic f without bottom tail"

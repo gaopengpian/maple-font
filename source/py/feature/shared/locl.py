@@ -20,7 +20,7 @@ locl_0 = ast.lookup(
     ],
 )
 
-st_acc = ast.subst_list_map(
+st_acc = ast.subst_map(
     ["S", "s", "T", "t"], source_suffix="cedilla", target_suffix="commaaccent"
 )
 

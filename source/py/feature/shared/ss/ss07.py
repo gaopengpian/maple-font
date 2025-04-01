@@ -1,24 +1,26 @@
 from source.py.feature import ast
 
 
-ss07_subst = [
-    ast.subst_list_liga(
-        ">>",
-        lookup_name=f"relax_{ast.gly('>>')}",
-        banner=[
-            ast.ignore(ast.clazz([">", "/", "<"]), ">", ">"),
-            ast.ignore(None, ">", [">", ">"]),
-        ],
-    ),
-    ast.subst_list_liga(
-        ">>>",
-        lookup_name=f"relax_{ast.gly('>>>')}",
-        banner=[
-            ast.ignore(">", ">", [">", ">"]),
-            ast.ignore(None, ">", [">", ">", ">"]),
-        ],
-    ),
-]
+def ss07_subst():
+    return [
+        ast.subst_liga(
+            ">>",
+            lookup_name=f"relax_{ast.gly('>>')}",
+            banner=[
+                ast.ignore(ast.clazz([">", "/", "<"]), ">", ">"),
+                ast.ignore(None, ">", [">", ">"]),
+            ],
+        ),
+        ast.subst_liga(
+            ">>>",
+            lookup_name=f"relax_{ast.gly('>>>')}",
+            banner=[
+                ast.ignore(">", ">", [">", ">"]),
+                ast.ignore(None, ">", [">", ">", ">"]),
+            ],
+        ),
+    ]
+
 
 ss07_name = "Break connected strokes between italic letters"
-ss07_feat = ast.ss(7, ss07_name, ss07_subst)
+ss07_feat = ast.ss(7, ss07_name, ss07_subst())

@@ -11,16 +11,15 @@ class Line:
 
 
 class Clazz:
-    def __init__(self, name: str, glyphs: list[str], cls: "list[Clazz]" = []) -> None:
+    def __init__(self, name: str, glyphs: "Sequence[str | Clazz]" = []) -> None:
         self.name = name
         self.glyphs = glyphs
-        self.cls = cls
 
     def ref(self) -> str:
         return f"@{self.name}"
 
     def state(self) -> Line:
-        return Line(f"{self.ref()} = {clazz([*self.glyphs, *self.cls])};")
+        return Line(f"{self.ref()} = {clazz(self.glyphs)};")
 
 
 __punctuation_map = {
@@ -94,7 +93,7 @@ def __subst(source: str, target: str) -> Line:
 SPC = "SPC"
 
 
-def gly(g: str | list[str], suffix: str = "", overwrite=False):
+def gly(g: str | Clazz | Sequence[str | Clazz], suffix: str = "", overwrite=False):
     """
     Normalize glyph name.
 
@@ -110,17 +109,41 @@ def gly(g: str | list[str], suffix: str = "", overwrite=False):
     >>> gly("--", ".suffix", True)
     "hyphen_hyphen.suffix"
     """
-    if len(g) > 1:
-        suf = suffix if overwrite else (".liga" + suffix)
-        return "_".join(map(__gly, list(g))) + suf
+    if not isinstance(g, Clazz) and len(g) > 1:
+        _g = list(g)
+        if _g[0] in total_punctuations:
+            suf = suffix if overwrite else (".liga" + suffix)
+            return "_".join(map(__gly, list(g))) + suf
     return __gly(g) + suffix
+
+
+def clazz(glyphs: Sequence[str | Clazz]) -> str:
+    """
+    Generate inline class.
+
+    >>> clazz(["a", "@", "++", cls])
+    "[a at plus_plus.liga @cls]"
+    """
+    return "[" + " ".join([gly(g) for g in glyphs]) + "]"
+
+
+def clazz_states(cls: list[Clazz], prefix_empty_line=True) -> list[Line]:
+    """
+    Define classes
+    """
+    result = []
+    if prefix_empty_line:
+        result.append(Line(""))
+    for c in cls:
+        result.append(c.state())
+    return result
 
 
 def create(cls: list[Clazz], content: list[Line], indent=2) -> str:
     _idt = indent * " "
     lines: list[Line] = []
 
-    for line in [c.state() for c in cls] + content:
+    for line in clazz_states(cls, False) + content:
         if line.text.startswith("#") or (
             line.text.startswith("feature ") and line.text.endswith("{")
         ):
@@ -143,17 +166,13 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     ]
     """
     target = []
-    for c in content:
-        if isinstance(c, list):
-            for i in c:
-                target.append(i.indent())
-        else:
-            target.append(c.indent())
+    for c in flatten(content):
+        target.append(c.indent())
 
     return [Line(f"feature {tag} {{"), *target, Line(f"}} {tag};")]
 
 
-def cv(id: int, name: str, content: list[Line]) -> list[Line]:
+def cv(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     """
     Generate Character Variants (cv) OpenType feature.
     Raises:
@@ -175,14 +194,23 @@ def cv(id: int, name: str, content: list[Line]) -> list[Line]:
             f"id should > 0 and < 100 in Character Variants, current is {id}"
         )
 
-    param = [
+    lines = [
+        Line(""),
         Line("cvParameters {"),
         Line("FeatUILabelNameID {", 1),
         Line(f'name "{name}";', 2),
         Line("};", 1),
         Line("};"),
     ]
-    return feature(f"cv{id:02d}", [*param, *content])
+
+    _content = flatten(content)
+
+    if not _content[0].text.startswith("lookup"):
+        lines.append(Line(""))
+
+    lines += _content
+
+    return feature(f"cv{id:02d}", lines)
 
 
 def ss(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
@@ -203,17 +231,23 @@ def ss(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     """
     if id < 1 or id > 20:
         raise TypeError(f"id should > 0 and < 21 in Stylistic Sets, current is {id}")
-
-    param = [
+    _content = flatten(content)
+    lines = [
+        Line(""),
         Line("featureNames {"),
         Line(f'name "{name}";', 1),
         Line("};"),
     ]
-    return feature(f"ss{id:02d}", [*param, *content])
+    if not _content[0].text.startswith("lookup"):
+        lines.append(Line(""))
+
+    lines += _content
+
+    return feature(f"ss{id:02d}", lines)
 
 
-def langsys_list(config: list[list[str]]) -> list[Line]:
-    return [Line(f"languagesystem {script} {lang};") for script, lang in config]
+def langsys(script: str, lang: str) -> Line:
+    return Line(f"languagesystem {script} {lang};")
 
 
 def lang(lang: str) -> Line:
@@ -259,10 +293,8 @@ def subst(
     """
     Generate substitution line.
 
-    >>> subst(["a"], "b", "-", "d")
-    [
-        Line("sub a b' hyphen by d;")
-    ]
+    >>> subst(["-"], "b", cls, "d")
+    Line("sub hyphen b' @cls by d;")
     """
     marker = "'"
     if not prefix and not suffix:
@@ -273,7 +305,7 @@ def subst(
     )
 
 
-def subst_list_map(
+def subst_map(
     glyphs: list[str],
     source_suffix: str = "",
     target_suffix: str = "",
@@ -281,7 +313,7 @@ def subst_list_map(
     """
     Generate substitution lines for a list of glyphs with a specified suffix.
 
-    >>> subst_list_map(["Q", "all", "{{"], target_suffix=".cv01")
+    >>> subst_map(["Q", "all", "{{"], target_suffix=".cv01")
     [
         Line("sub Q by Q.cv01;"),
         Line("sub all by all.cv01;"),
@@ -296,7 +328,7 @@ def subst_list_map(
     return result
 
 
-def subst_list_liga(
+def subst_liga(
     source: str | list[str],
     target: str | None = None,
     lookup_name: str | None = None,
@@ -326,7 +358,7 @@ def subst_list_liga(
         list[Line]: Lines forming a lookup block with substitution rules.
 
     Examples:
-        >>> subst_list_liga("!=", banner=[ignore("a", "b", "c")])
+        >>> subst_liga("!=", banner=[ignore("a", "b", "c")])
         [
             Line("lookup exclam_equal.liga {"),
             Line("ignore sub a b' c;"),
@@ -334,7 +366,7 @@ def subst_list_liga(
             Line("sub SPC equal' by exclam_equal.liga;"),
             Line("} lookup exclam_equal.liga;")
         ]
-        >>> subst_list_liga("!=", surround=[[["a","b"], "c"], [cls, ["a","c"]]])
+        >>> subst_liga("!=", surround=[[["a","b"], "c"], [cls, ["a","c"]]])
         [
             Line("lookup exclam_equal.liga {"),
             Line("sub a b exclam' equal c by SPC;"),
@@ -350,7 +382,9 @@ def subst_list_liga(
     if not lookup_name:
         lookup_name = target
     if not desc:
-        desc = "Ligature rules for " + source if isinstance(source, str) else lookup_name
+        desc = (
+            "Ligature rules for " + source if isinstance(source, str) else lookup_name
+        )
     if banner is None:
         banner = []
 
@@ -396,17 +430,18 @@ def ignore(
 
     >>> ignore("{", "b", ["c", "d"])
     Line("ignore sub braceleft b' c d;")
-    >>> ignore("_ _", "b", cls)
+    >>> ignore(["_", "_"], "b", cls)
     Line("ignore sub underscore underscore b' @cls;")
     """
     return Line(f"ignore sub {__prefix(prefix)}{__gly(glyph)}'{__suffix(suffix)};")
 
 
-def clazz(glyphs: Sequence[str | Clazz] = []) -> str:
-    """
-    Generate inline class.
-
-    >>> ignore(["a", "+", "@"], [cls])
-    "[@cls a plus at]"
-    """
-    return "[" + " ".join([__gly(g) for g in glyphs]) + "]"
+def flatten(data: Sequence[Line | list[Line]]) -> list[Line]:
+    result = []
+    for item in data:
+        if isinstance(item, list):
+            for it in item:
+                result.append(it)
+        else:
+            result.append(item)
+    return result

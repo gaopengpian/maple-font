@@ -3,56 +3,56 @@ from source.py.feature import ast
 
 def get_lookup():
     return [
-        ast.subst_list_liga(
+        ast.subst_liga(
             "::",
             banner=[
                 ast.ignore(":", ":", ":"),
                 ast.ignore(None, ":", [":", ast.clazz(["=", ":"])]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ":::",
             banner=[
                 ast.ignore(":", ":", [":", ":"]),
                 ast.ignore(None, ":", [":", ":", ":"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ":?",
             banner=[
                 ast.ignore(":", ":", "?"),
                 ast.ignore(None, ":", ["?", ast.clazz(["?", ">"])]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ":?>",
             banner=[
                 ast.ignore(":", ":", ["?", ">"]),
                 ast.ignore(None, ":", ["?", ">", ">"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ":=",
             banner=[
                 ast.ignore(ast.clazz(["=", ":"]), ":", "="),
                 ast.ignore(None, ":", ["=", ast.clazz(["=", ":"])]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "=:",
             banner=[
                 ast.ignore(ast.clazz(["=", ":"]), "=", ":"),
                 ast.ignore("=", ":", ast.clazz(["=", ":"])),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ":=:",
             banner=[
                 ast.ignore(ast.clazz(["=", ":", "<", ">", "?"]), "=", ["=", ":"]),
                 ast.ignore(None, ":", ["=", ":", ast.clazz(["=", ":", "<", ">", "?"])]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "=:=",
             banner=[
                 ast.ignore("=", "=", [":", "="]),
@@ -60,42 +60,42 @@ def get_lookup():
                 ast.ignore(None, "=", [":", "=", "="]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "<:",
             banner=[
                 ast.ignore("<", "<", ":"),
                 ast.ignore(None, "<", [":", ast.clazz(["<", ":", ">"])]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ":>",
             banner=[
                 ast.ignore(ast.clazz([":", "<", ">"]), ":", ">"),
                 ast.ignore(None, ":", [">", ">"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ":<",
             banner=[
                 ast.ignore(ast.clazz([":", "<"]), ":", "<"),
                 ast.ignore(None, ":", ["<", ast.clazz(["<", "/", ">"])]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "<:<",  # scala / haskell
             banner=[
                 ast.ignore("<", "<", [":", "<"]),
                 ast.ignore(None, "<", [":", "<", "<"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             ">:>",  # scala / haskell
             banner=[
                 ast.ignore(">", ">", [":", ">"]),
                 ast.ignore(None, ">", [":", ">", ">"]),
             ],
         ),
-        ast.subst_list_liga(
+        ast.subst_liga(
             "::=",
             banner=[
                 ast.ignore(":", ":", [":", "="]),

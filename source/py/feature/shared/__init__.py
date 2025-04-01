@@ -24,7 +24,7 @@ aalt_features = ast.feature(
 
 case_features = ast.feature(
     "case",
-    ast.subst_list_map(
+    ast.subst_map(
         [
             "colon",
             "periodcentered.loclCAT",

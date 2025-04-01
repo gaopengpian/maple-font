@@ -2,7 +2,7 @@ import source.py.feature.ast as ast
 
 
 def cv02_subst():
-    return ast.subst_list_map(
+    return ast.subst_map(
         [
             "a",
             "aacute",

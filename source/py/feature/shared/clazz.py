@@ -4,8 +4,7 @@ zero = ast.Clazz("Zero", ["zero", "zero.zero"])
 one = ast.Clazz("One", ["one", "one.cv04"])
 digit = ast.Clazz(
     "Digit",
-    ["two", "three", "four", "five", "six", "seven", "eight", "nine"],
-    [zero, one],
+    [zero, one, "two", "three", "four", "five", "six", "seven", "eight", "nine"],
 )
 
 uppercase = ast.Clazz(
