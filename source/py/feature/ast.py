@@ -55,6 +55,12 @@ __punctuation_map = {
     "|": "bar",
     "`": "grave",
     "~": "asciitilde",
+    "“": "quoteleft",
+    "”": "quoteright",
+    "‘": "quotedblleft",
+    "’": "quotedblright",
+    "…": "ellipsis",
+    "—": "emdash",
 }
 
 total_punctuations = __punctuation_map.keys()
@@ -187,6 +193,9 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
 
     return [Line(f"feature {tag} {{"), Line(""), *target, Line(""), Line(f"}} {tag};")]
 
+def use_feature(name: str) -> Line:
+    return Line(f"feature {name};")
+
 
 def cv(id: int, name: str, content: Sequence[Line | list[Line]]) -> list[Line]:
     """
@@ -297,6 +306,10 @@ def lookup(name: str, desc: str | None, content: list[Line]) -> list[Line]:
 
     arr.append(Line(f"}} {name};"))
     return arr
+
+
+def use_lookup(name: str) -> Line:
+    return Line(f"lookup {name};")
 
 
 def subst(

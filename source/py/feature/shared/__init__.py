@@ -1,24 +1,21 @@
 import source.py.feature.ast as ast
-from source.py.feature.shared.ccmp import ccmp_features
+from source.py.feature.shared.ccmp import ccmp_features, ccmp_features_cn
 from source.py.feature.shared.number import number_features
-from source.py.feature.shared.locl import locl_features
-
-def use_feat(tag: str):
-    return ast.Line(f"feature {tag};")
+from source.py.feature.shared.locl import locl_features, locl_features_cn
 
 
 aalt_features = ast.feature(
     "aalt",
     [
-        use_feat("calt"),
-        use_feat("locl"),
-        use_feat("subs"),
-        use_feat("sinf"),
-        use_feat("sups"),
-        use_feat("frac"),
-        use_feat("ordn"),
-        use_feat("case"),
-        use_feat("zero"),
+        ast.use_feature("calt"),
+        ast.use_feature("locl"),
+        ast.use_feature("subs"),
+        ast.use_feature("sinf"),
+        ast.use_feature("sups"),
+        ast.use_feature("frac"),
+        ast.use_feature("ordn"),
+        ast.use_feature("case"),
+        ast.use_feature("zero"),
     ],
 )
 
@@ -73,10 +70,17 @@ case_features = ast.feature(
 )
 
 
-basic_features: list[ast.Line] = [
+basic_features = [
     *aalt_features,
     *number_features,
     *case_features,
     *ccmp_features,
     *locl_features,
+    *ccmp_features,
+    *locl_features,
+]
+
+basic_features_cn = [
+    *ccmp_features_cn,
+    *locl_features_cn,
 ]

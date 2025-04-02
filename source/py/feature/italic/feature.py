@@ -13,15 +13,14 @@ from source.py.feature.shared.cv import (
     cv36,
     cv37,
 )
-from source.py.feature.shared.ss import ss01, ss02, ss03, ss04, ss05, ss07, ss08
+from source.py.feature.shared.ss import ss01, ss02, ss03, ss04, ss05, ss06, ss07, ss08
 
 calt = ast.feature(
     "calt",
     get_calt_italic(cls_letters_list, hex_letter),
 )
-feature_list = [
-    *basic_features,
-    *calt,
+
+cv_list = [
     *cv01.cv01_feat_italic,
     *cv04.cv04_feat_italic,
     *cv31.cv31_feat_italic,
@@ -31,11 +30,22 @@ feature_list = [
     *cv35.cv35_feat_italic,
     *cv36.cv36_feat_italic,
     *cv37.cv37_feat_italic,
+]
+
+ss_list = [
     *ss01.ss01_feat,
     *ss02.ss02_feat,
     *ss03.ss03_feat,
     *ss04.ss04_feat,
     *ss05.ss05_feat,
+    *ss06.ss06_feat,
     *ss07.ss07_feat,
     *ss08.ss08_feat,
+]
+
+feature_list = [
+    *basic_features,
+    *calt,
+    *cv_list,
+    *ss_list,
 ]

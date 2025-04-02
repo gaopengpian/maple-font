@@ -60,6 +60,26 @@ locl_3 = ast.lookup(
     ],
 )
 
+
+lookup_tw_name = "PunctuationTW"
+lookup_tw = ast.lookup(
+    lookup_tw_name,
+    "Centered punctuations",
+    ast.subst_map(
+        [
+            "uni3001",
+            "uni3002",
+            "uniFF01",
+            "uniFF0C",
+            "uniFF1A",
+            "uniFF1B",
+            "uniFF1F",
+        ],
+        target_suffix=".tw",
+    ),
+)
+
+
 locl_features = ast.feature(
     "locl",
     [
@@ -67,5 +87,16 @@ locl_features = ast.feature(
         locl_1,
         locl_2,
         locl_3,
-    ],
+    ]
+)
+
+locl_features_cn = ast.feature(
+    "locl",
+    [
+        *lookup_tw,
+        ast.lang("ZHH"),
+        ast.use_lookup(lookup_tw_name),
+        ast.lang("ZHT"),
+        ast.use_lookup(lookup_tw_name),
+    ]
 )

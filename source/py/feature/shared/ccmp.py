@@ -88,20 +88,26 @@ def comb(c1: str, c2: str) -> list[ast.Line]:
     ]
 
 
+def comb_jp(c1: str, c2: str) -> ast.Line:
+    return ast.__subst(f"uni{c1} uni{c1}", f"uni{c1}{c2}")
+
+
 ccmp_latin = ast.lookup(
     "ccmp_latin",
     None,
-    ast.flatten([
-        ast.Line("lookupflag 0;"),
-        comb("breve", "acute"),
-        comb("breve", "grave"),
-        comb("breve", "hookabove"),
-        comb("breve", "tilde"),
-        comb("circumflex", "acute"),
-        comb("circumflex", "grave"),
-        comb("circumflex", "hookabove"),
-        comb("circumflex", "tilde"),
-    ]),
+    ast.flatten(
+        [
+            ast.Line("lookupflag 0;"),
+            comb("breve", "acute"),
+            comb("breve", "grave"),
+            comb("breve", "hookabove"),
+            comb("breve", "tilde"),
+            comb("circumflex", "acute"),
+            comb("circumflex", "grave"),
+            comb("circumflex", "hookabove"),
+            comb("circumflex", "tilde"),
+        ]
+    ),
 )
 start_other = ast.clazz(["i", "i-cy", "iogonek", "idotbelow", "j", "je-cy"])
 end_other = ast.clazz(
@@ -115,8 +121,9 @@ end_other = ast.clazz(
     ]
 )
 
+ccmp_other_name = "ccmp_other"
 ccmp_other = ast.lookup(
-    "ccmp_other",
+    ccmp_other_name,
     None,
     [
         ast.subst(
@@ -138,10 +145,12 @@ ccmp_other = ast.lookup(
     ],
 )
 
+
+
 ccmp_features = ast.feature(
     "ccmp",
     [
-        ast.clazz_states(
+        *ast.clazz_states(
             [
                 comb_top_acc,
                 comb_non_top_acc,
@@ -152,6 +161,35 @@ ccmp_features = ast.feature(
         *ccmp_other,
         *ccmp_latin,
         ast.script("latn"),
-        ast.Line("lookup ccmp_latin;"),
-    ],
+        ast.use_lookup(ccmp_other_name),
+    ]
+)
+
+ccmp_features_cn = ast.feature(
+    "ccmp",
+    [
+        comb_jp("3042", "3099"),
+        comb_jp("3044", "3099"),
+        comb_jp("3048", "3099"),
+        comb_jp("304A", "3099"),
+        comb_jp("304B", "309A"),
+        comb_jp("304D", "309A"),
+        comb_jp("304F", "309A"),
+        comb_jp("3051", "309A"),
+        comb_jp("3053", "309A"),
+        comb_jp("3093", "3099"),
+        comb_jp("30A2", "3099"),
+        comb_jp("30A4", "3099"),
+        comb_jp("30A8", "3099"),
+        comb_jp("30AA", "3099"),
+        comb_jp("30AB", "309A"),
+        comb_jp("30AD", "309A"),
+        comb_jp("30AF", "309A"),
+        comb_jp("30B1", "309A"),
+        comb_jp("30B3", "309A"),
+        comb_jp("30BB", "309A"),
+        comb_jp("30C4", "309A"),
+        comb_jp("30C8", "309A"),
+        comb_jp("30F3", "3099"),
+    ]
 )
