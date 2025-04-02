@@ -278,7 +278,7 @@ def generate_directory_hash(dir_path: str) -> str:
     return hasher.hexdigest()
 
 
-def merge_ttfonts(base_font_path: TTFont, extra_font_path: TTFont) -> TTFont:
+def merge_ttfonts(base_font_path: str, extra_font_path: str) -> TTFont:
     """
     Merge glyphs from ``source_font`` into ``base_font``, skipping duplicate glyph names.
 

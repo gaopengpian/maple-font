@@ -2,6 +2,8 @@ from collections.abc import Sequence
 
 
 class Line:
+    __slots__ = ("text", "level")
+
     def __init__(self, text: str, level=0) -> None:
         self.text = text
         self.level = level
@@ -11,18 +13,20 @@ class Line:
 
 
 class Clazz:
+    __slots__ = ("name", "glyphs")
+
     def __init__(self, name: str, glyphs: "Sequence[str | Clazz]" = []) -> None:
         self.name = name
-        self.glyphs = glyphs
+        self.glyphs = tuple(glyphs)
 
-    def ref(self) -> str:
+    def use(self) -> str:
         return f"@{self.name}"
 
     def state(self) -> Line:
-        return Line(f"{self.ref()} = {clazz(self.glyphs)};")
+        return Line(f"{self.use()} = {clazz(self.glyphs)};")
 
 
-__punctuation_map = {
+__PUNCTUATION_MAP = {
     "{": "braceleft",
     "}": "braceright",
     "[": "bracketleft",
@@ -63,7 +67,7 @@ __punctuation_map = {
     "—": "emdash",
 }
 
-total_punctuations = __punctuation_map.keys()
+KNOWN_PUNCTUATIONS = set(__PUNCTUATION_MAP.keys())
 
 
 def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
@@ -72,11 +76,11 @@ def __gly(g: str | Clazz | Sequence[str | Clazz] | None) -> str:
     if isinstance(g, list):
         return " ".join([__gly(_) for _ in g])
     if isinstance(g, Clazz):
-        return g.ref()
+        return g.use()
     if not isinstance(g, str):
         raise TypeError(f"{g}({type(g)}) is invalid for __gly")
-    if g in total_punctuations:
-        return __punctuation_map[g]
+    if g in __PUNCTUATION_MAP:
+        return __PUNCTUATION_MAP[g]
     return g
 
 
@@ -97,7 +101,7 @@ def __subst(source: str, target: str) -> Line:
 
 
 def __parse_glyph(g: str | Clazz):
-    if isinstance(g, str) and len(g) > 1 and g[0] in total_punctuations:
+    if isinstance(g, str) and len(g) > 1 and g[0] in KNOWN_PUNCTUATIONS:
         return "_".join(map(__gly, list(g))) + ".liga"
     else:
         return __gly(g)
@@ -192,6 +196,7 @@ def feature(tag: str, content: Sequence[Line | list[Line]]) -> list[Line]:
         target.append(c.indent())
 
     return [Line(f"feature {tag} {{"), Line(""), *target, Line(""), Line(f"}} {tag};")]
+
 
 def use_feature(name: str) -> Line:
     return Line(f"feature {name};")
@@ -410,9 +415,7 @@ def subst_liga(
     if not lookup_name:
         lookup_name = target
     if not desc:
-        desc = (
-            "Ligature rules for " + source if isinstance(source, str) else lookup_name
-        )
+        desc = source if isinstance(source, str) else lookup_name
     if banner is None:
         banner = []
 
