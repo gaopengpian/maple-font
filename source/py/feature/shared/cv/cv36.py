@@ -3,7 +3,7 @@ import source.py.feature.ast as ast
 
 def cv36_subst():
     return ast.subst_map(
-        ["x", ast.gly("x_l"), ast.gly("x_l", ".cv04"), ast.gly("x_l", ".cv35")],
+        ["x", ast.gly("xl"), ast.gly("xl", ".cv04"), ast.gly("xl", ".cv35")],
         target_suffix=".cv36",
     )
 

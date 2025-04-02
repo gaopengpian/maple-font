@@ -26,10 +26,10 @@ def cv35_subst():
 
     # previous cv
     overwrite_glyphs = {
-        "a_l.liga": ".cv31",
-        "a_l_l.liga": ".cv31",
-        "i_l.liga": ".cv33",
-        "i_l_l.liga": ".cv33",
+        ast.gly("al"): ".cv31",
+        ast.gly("all"): ".cv31",
+        ast.gly("il"): ".cv33",
+        ast.gly("ill"): ".cv33",
     }
 
     suf_cv04 = ".cv04"
@@ -57,7 +57,7 @@ def cv35_subst():
             ]
         )
 
-    result.append(ast.__subst("one.cv04", "one"))
+    result.append(ast.subst(None, "one.cv04", None, "one"))
 
     return result
 

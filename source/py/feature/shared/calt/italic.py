@@ -20,7 +20,6 @@ def get_lookup():
         ast.subst_liga(
             "ll",
             banner=[
-                ast.ignore(None, "l", ["l", "l"]),
                 ast.ignore(
                     ast.clazz(
                         [
@@ -37,6 +36,7 @@ def get_lookup():
                     "l",
                     "l",
                 ),
+                ast.ignore(None, "l", ["l", "l"]),
             ],
         ),
     ]

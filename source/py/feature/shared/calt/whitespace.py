@@ -174,14 +174,14 @@ def get_lookup():
             "?:",
             banner=[
                 ast.ignore("?", "?", ":"),
-                ast.ignore(None, "?", [":", ast.clazz([".", "="])]),
+                ast.ignore(None, "?", [":", ast.clazz([".", ":", "=", "<", ">"])]),
             ],
         ),
         ast.subst_liga(
             "?.",  # TypeScript / Rust
             banner=[
                 ast.ignore("?", "?", "."),
-                ast.ignore(None, "?", [".", "."]),
+                ast.ignore(None, "?", [".", ast.clazz([".", "=", "?"])]),
             ],
         ),
         ast.subst_liga(

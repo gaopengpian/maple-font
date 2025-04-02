@@ -77,19 +77,19 @@ def get_lookup():
                 ast.ignore(None, "#", ["_", "_", "_"]),
             ],
         ),
-        ast.subst_liga(
-            "#_(",
-            banner=[
-                ast.ignore("#", "#", ["_", "("]),
-                ast.ignore(None, "#", ["_", "(", "("]),
-            ],
-        ),
         ast.lookup(
             ast.gly("##__"),
             "Ligature rules for ##__",
             [
                 ast.ignore("#", "#", [ast.SPC, ast.SPC, ast.gly("#__")]),
                 ast.subst(None, "#", [ast.SPC, ast.SPC, ast.gly("#__")], start),
+            ],
+        ),
+        ast.subst_liga(
+            "#_(",
+            banner=[
+                ast.ignore("#", "#", ["_", "("]),
+                ast.ignore(None, "#", ["_", "(", "("]),
             ],
         ),
         ast.lookup(

@@ -90,6 +90,13 @@ def __subst(source: str, target: str) -> Line:
     return Line(f"sub {source} by {target};")
 
 
+def __parse_glyph(g: str | Clazz):
+    if isinstance(g, str) and len(g) > 1 and g[0] in total_punctuations:
+        return "_".join(map(__gly, list(g))) + ".liga"
+    else:
+        return __gly(g)
+
+
 SPC = "SPC"
 
 
@@ -104,16 +111,16 @@ def gly(g: str | Clazz | Sequence[str | Clazz], suffix: str = "", overwrite=Fals
     "underline"
     >>> gly("++")
     "plus_plus.liga"
+    >>> gly("cl")
+    "c_l.liga"
     >>> gly("--", ".suffix")
     "hyphen_hyphen.liga.suffix"
     >>> gly("--", ".suffix", True)
     "hyphen_hyphen.suffix"
     """
     if not isinstance(g, Clazz) and len(g) > 1:
-        _g = list(g)
-        if _g[0] in total_punctuations:
-            suf = suffix if overwrite else (".liga" + suffix)
-            return "_".join(map(__gly, list(g))) + suf
+        suf = suffix if overwrite else (".liga" + suffix)
+        return "_".join(map(__gly, list(g))) + suf
     return __gly(g) + suffix
 
 
@@ -124,12 +131,18 @@ def clazz(glyphs: Sequence[str | Clazz]) -> str:
     >>> clazz(["a", "@", "++", cls])
     "[a at plus_plus.liga @cls]"
     """
-    return "[" + " ".join([gly(g) for g in glyphs]) + "]"
+
+    arr = []
+
+    for g in glyphs:
+        arr.append(__parse_glyph(g))
+
+    return "[" + " ".join(arr) + "]"
 
 
 def clazz_states(cls: list[Clazz], prefix_empty_line=True) -> list[Line]:
     """
-    Define classes
+    Declare classes
     """
     result = []
     if prefix_empty_line:
@@ -324,7 +337,7 @@ def subst_map(
     """
     result = []
     for g in glyphs:
-        _g = gly(list(g)) if g[0] in total_punctuations else g
+        _g = __parse_glyph(g)
         result.append(__subst(f"{_g}{source_suffix}", f"{_g}{target_suffix}"))
 
     return result

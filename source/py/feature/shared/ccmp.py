@@ -81,32 +81,27 @@ marks_comb = ast.Clazz("Markscomb", marks)
 marks_comb_case = ast.Clazz("MarkscombCase", [f"{m}.case" for m in marks])
 
 
-def comb(config: list[list[str]]) -> list[ast.Line]:
-    result = [ast.Line("lookupflag 0;")]
-    for conf in config:
-        c1, c2 = conf[0], conf[1]
-        result.append(ast.__subst(f"{c1}comb {c2}comb", f"{c1}comb_{c2}comb"))
-        result.append(
-            ast.__subst(f"{c1}comb.case {c2}comb.case", f"{c1}comb_{c2}comb.case")
-        )
-    return result
+def comb(c1: str, c2: str) -> list[ast.Line]:
+    return [
+        ast.__subst(f"{c1}comb {c2}comb", f"{c1}comb_{c2}comb"),
+        ast.__subst(f"{c1}comb.case {c2}comb.case", f"{c1}comb_{c2}comb.case"),
+    ]
 
 
 ccmp_latin = ast.lookup(
     "ccmp_latin",
     None,
-    comb(
-        [
-            ["breve", "acute"],
-            ["breve", "grave"],
-            ["breve", "hookabove"],
-            ["breve", "tilde"],
-            ["circumflex", "acute"],
-            ["circumflex", "grave"],
-            ["circumflex", "hookabove"],
-            ["circumflex", "tilde"],
-        ]
-    ),
+    ast.flatten([
+        ast.Line("lookupflag 0;"),
+        comb("breve", "acute"),
+        comb("breve", "grave"),
+        comb("breve", "hookabove"),
+        comb("breve", "tilde"),
+        comb("circumflex", "acute"),
+        comb("circumflex", "grave"),
+        comb("circumflex", "hookabove"),
+        comb("circumflex", "tilde"),
+    ]),
 )
 start_other = ast.clazz(["i", "i-cy", "iogonek", "idotbelow", "j", "je-cy"])
 end_other = ast.clazz(
