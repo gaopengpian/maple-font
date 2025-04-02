@@ -11,7 +11,6 @@ from os import environ, getcwd, listdir, makedirs, path, remove, getenv
 from typing import Callable
 from fontTools.ttLib import TTFont, newTable
 from fontTools.feaLib.builder import addOpenTypeFeaturesFromString
-from fontTools.merge import Merger
 from source.py.utils import (
     check_font_patcher,
     generate_directory_hash,
@@ -25,6 +24,7 @@ from source.py.utils import (
     run,
     set_font_name,
     joinPaths,
+    merge_ttfonts,
 )
 from source.py.freeze import freeze_feature, get_freeze_config_str
 from source.py.feature import generate_fea_string
@@ -618,13 +618,14 @@ def parse_style_name(style_name_compact: str, skip_subfamily_list: list[str]):
         _style_name = style_name_compact[:-6] + " Italic"
 
     if style_name_compact in skip_subfamily_list:
-        return "", _style_name, _style_name, True
+        return "", _style_name, _style_name, True, is_italic
     else:
         return (
             " " + style_name_compact.replace("Italic", ""),
             "Italic" if is_italic else "Regular",
             _style_name,
             False,
+            is_italic,
         )
 
 
@@ -799,7 +800,7 @@ def build_mono(f: str, font_config: FontConfig, build_option: BuildOption):
 
     style_compact = f.split("-")[-1].split(".")[0]
 
-    style_with_prefix_space, style_in_2, style_in_17, is_skip_subfamily = (
+    style_with_prefix_space, style_in_2, style_in_17, is_skip_subfamily, _ = (
         parse_style_name(
             style_name_compact=style_compact,
             skip_subfamily_list=build_option.skip_subfamily_list,
@@ -877,12 +878,10 @@ def build_mono(f: str, font_config: FontConfig, build_option: BuildOption):
 def build_nf_by_prebuild_nerd_font(
     font_basename: str, font_config: FontConfig, build_option: BuildOption
 ) -> TTFont:
-    merger = Merger()
-    return merger.merge(
-        [
-            joinPaths(build_option.ttf_base_dir, font_basename),
-            f"{build_option.src_dir}/MapleMono-NF-Base{'-Mono' if font_config.nerd_font['mono'] else ''}.ttf",
-        ]
+    prefix = "-Mono" if font_config.nerd_font["mono"] else ""
+    return merge_ttfonts(
+        base_font_path=joinPaths(build_option.ttf_base_dir, font_basename),
+        extra_font_path=f"{build_option.src_dir}/MapleMono-NF-Base{prefix}.ttf",
     )
 
 
@@ -931,7 +930,7 @@ def build_nf(
     # format font name
     style_compact_nf = f.split("-")[-1].split(".")[0]
 
-    style_nf_with_prefix_space, style_in_2, style_in_17, is_skip_sufamily = (
+    style_nf_with_prefix_space, style_in_2, style_in_17, is_skip_sufamily, _ = (
         parse_style_name(
             style_name_compact=style_compact_nf,
             skip_subfamily_list=build_option.skip_subfamily_list,
@@ -974,21 +973,22 @@ def build_cn(f: str, font_config: FontConfig, build_option: BuildOption):
 
     print(f"👉 {build_option.cn_suffix_compact} version for {f}")
 
-    merger = Merger()
-    cn_font = merger.merge(
-        [
-            joinPaths(build_option.cn_base_font_dir, f),
-            joinPaths(
-                build_option.cn_static_dir, f"MapleMonoCN-{style_compact_cn}.ttf"
-            ),
-        ]
+    cn_font = merge_ttfonts(
+        base_font_path=joinPaths(build_option.cn_base_font_dir, f),
+        extra_font_path=joinPaths(
+            build_option.cn_static_dir, f"MapleMonoCN-{style_compact_cn}.ttf"
+        ),
     )
 
-    style_cn_with_prefix_space, style_in_2, style_in_17, is_skip_subfamily = (
-        parse_style_name(
-            style_name_compact=style_compact_cn,
-            skip_subfamily_list=build_option.skip_subfamily_list,
-        )
+    (
+        style_cn_with_prefix_space,
+        style_in_2,
+        style_in_17,
+        is_skip_subfamily,
+        is_italic,
+    ) = parse_style_name(
+        style_name_compact=style_compact_cn,
+        skip_subfamily_list=build_option.skip_subfamily_list,
     )
 
     postscript_name = f"{font_config.family_name_compact}-{build_option.cn_suffix_compact}-{style_compact_cn}"
@@ -1014,7 +1014,8 @@ def build_cn(f: str, font_config: FontConfig, build_option: BuildOption):
 
     # https://github.com/subframe7536/maple-font/issues/188
     # https://github.com/subframe7536/maple-font/issues/313
-    fix_cn_cv(cn_font)
+    # fix_cn_cv(cn_font)
+    generate_fea_string("Italic" in style_in_2, is_italic)
 
     handle_ligatures(
         font=cn_font,

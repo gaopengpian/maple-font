@@ -1,5 +1,5 @@
 import source.py.feature.ast as ast
-from source.py.feature.shared.clazz import basic_class_list
+from source.py.feature.shared.clazz import base_class_list
 
 
 cls_a = ast.Clazz("A", ["A", "a", "a.cv02"])
@@ -60,7 +60,7 @@ cls_letters_list = [
 ]
 
 class_list = [
-    *basic_class_list,
+    *base_class_list,
     *cls_letters_list,
     hex_letter,
 ]

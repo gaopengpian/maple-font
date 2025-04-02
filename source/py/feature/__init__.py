@@ -6,11 +6,13 @@ import source.py.feature.italic.clazz as italic_clazz
 import source.py.feature.italic.feature as italic_feat
 
 
-def generate_fea_string(italic: bool):
+def generate_fea_string(italic: bool, cn: bool):
     cls = italic_clazz.class_list if italic else regular_clazz.class_list
-    feat = italic_feat.feature_list if italic else regular_feat.feature_list
+
+    if cn:
+        feat = italic_feat.feature_list_cn if italic else regular_feat.feature_list_cn
+    else:
+        feat = italic_feat.feature_list if italic else regular_feat.feature_list
+
     return ast.create(cls, [*lang.lang_list, *feat])
 
-
-def generate_fea_string_cn():
-    return ast.create([], regular_feat.basic_features_cn)

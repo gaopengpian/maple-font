@@ -305,7 +305,7 @@ normal_separator = ast.Clazz(
     ],
 )
 
-basic_class_list = [
+base_class_list = [
     zero,
     one,
     digit,

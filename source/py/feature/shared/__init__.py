@@ -70,17 +70,18 @@ case_features = ast.feature(
 )
 
 
-basic_features = [
+base_features = [
     *aalt_features,
     *number_features,
     *case_features,
     *ccmp_features,
     *locl_features,
-    *ccmp_features,
-    *locl_features,
 ]
 
-basic_features_cn = [
+base_features_cn = [
+    *aalt_features,
+    *number_features,
+    *case_features,
     *ccmp_features_cn,
     *locl_features_cn,
 ]

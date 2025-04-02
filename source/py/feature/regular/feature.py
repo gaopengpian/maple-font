@@ -1,6 +1,6 @@
 import source.py.feature.ast as ast
 from source.py.feature.regular.clazz import hex_letter, cls_letters_list
-from source.py.feature.shared import basic_features, basic_features_cn
+from source.py.feature.shared import base_features, base_features_cn
 from source.py.feature.shared.calt import get_calt_regular
 from source.py.feature.shared.cv import cv01, cv02, cv03, cv04, cv96, cv97, cv98, cv99
 from source.py.feature.shared.ss import ss01, ss02, ss03, ss04, ss05, ss07, ss08
@@ -35,13 +35,16 @@ ss_list = [
 ]
 
 feature_list = [
-    *basic_features,
+    *base_features,
     *calt,
     *cv_list,
     *ss_list,
 ]
 
 feature_list_cn = [
-    *basic_features_cn,
+    *base_features_cn,
+    *calt,
+    *cv_list,
     *cv_list_cn,
+    *ss_list,
 ]
