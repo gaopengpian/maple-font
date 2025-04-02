@@ -10,7 +10,7 @@ from functools import partial
 from os import environ, getcwd, listdir, makedirs, path, remove, getenv
 from typing import Callable
 from fontTools.ttLib import TTFont, newTable
-from fontTools.feaLib.builder import addOpenTypeFeatures
+from fontTools.feaLib.builder import addOpenTypeFeaturesFromString
 from fontTools.merge import Merger
 from source.py.utils import (
     check_font_patcher,
@@ -27,6 +27,7 @@ from source.py.utils import (
     joinPaths,
 )
 from source.py.freeze import freeze_feature, get_freeze_config_str
+from source.py.feature import generate_fea_string
 
 FONT_VERSION = "v7.0"
 # =========================================================================================
@@ -1131,18 +1132,10 @@ def main():
                 ),
             )
 
-            if font_config.apply_fea_file:
-                fea_path = joinPaths(
-                    build_option.src_dir,
-                    "features/italic.fea"
-                    if "Italic" in input_file
-                    else "features/regular.fea",
-                )
-                print(f"Apply feature file [{fea_path}] into [{basename}]")
-                addOpenTypeFeatures(
-                    font,
-                    fea_path,
-                )
+            addOpenTypeFeaturesFromString(
+                font,
+                generate_fea_string("Italic" in input_file, False),
+            )
 
             set_font_name(
                 font,
