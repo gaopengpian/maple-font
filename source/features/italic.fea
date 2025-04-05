@@ -1286,6 +1286,19 @@ feature calt {
     sub bracketleft' D E B U G bracketright by SPC;
   } badge_debug.liga;
 
+  # [SUCCESS]
+  lookup badge_debug.liga {
+    sub SPC SPC SPC SPC SPC SPC SPC SPC bracketright' by badge_debug.liga;
+    sub SPC SPC SPC SPC SPC SPC SPC S' bracketright by SPC;
+    sub SPC SPC SPC SPC SPC SPC S' S bracketright by SPC;
+    sub SPC SPC SPC SPC SPC E' S S bracketright by SPC;
+    sub SPC SPC SPC SPC C' E S S bracketright by SPC;
+    sub SPC SPC SPC C' C E S S bracketright by SPC;
+    sub SPC SPC U' C C E S S bracketright by SPC;
+    sub SPC S' U C C E S S bracketright by SPC;
+    sub bracketleft' S U C C E S S bracketright by SPC;
+  } badge_debug.liga;
+
   # [INFO]
   lookup badge_info.liga {
     sub SPC SPC SPC SPC SPC bracketright' by badge_info.liga;
